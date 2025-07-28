@@ -53,11 +53,16 @@ const createProduct = async (req, res) => {
   }
 };
 
-const updateProduct = async (req, res) => {
+const updateProduct = async (req, res, userId) => {
   const { productId } = req.params;
   const { name, price, imageUrls, category, stock, brand, description } =
     req.body;
 
+  const product = await getAllProductById(productId);
+
+  if (product.owner != userId) {
+    res.status(403).json({ message: "Access denied" });
+  }
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,
@@ -83,8 +88,14 @@ const updateProduct = async (req, res) => {
     res.status(500).json({ message: "Error in update product", error });
   }
 };
-const deleteProduct = async (req, res) => {
+const deleteProduct = async (req, res, userId) => {
   const { productId } = req.params;
+
+  const product = await getAllProductById(productId);
+
+  if (product.owner != userId) {
+    res.status(403).json({ message: "Access denied" });
+  }
 
   try {
     const deletedProduct = await Product.findByIdAndDelete(productId);

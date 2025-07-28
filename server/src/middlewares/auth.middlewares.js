@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.models.js";
 
-export const verifyJwt = async (req, res, next) => {
+export const verifyJWT = async (req, res, next) => {
   const token =
     req.cookie.authToken || req.header("Authorization")?.replace("Bearer", "");
 
@@ -26,4 +26,19 @@ export const verifyJwt = async (req, res, next) => {
       .status(401)
       .json({ message: error.message || "Invalid access token " });
   }
+};
+
+export const verifyPermission = (roles = []) => {
+  return (req, res, next) => {
+    if (req.user._id) {
+      throw new Error("Unauthorized Error");
+    }
+    if (roles.includes(req.user?.role)) {
+      next();
+    } else {
+      res
+        .status(403)
+        .json({ message: "You are not allowed to perform this action" });
+    }
+  };
 };

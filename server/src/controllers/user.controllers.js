@@ -148,10 +148,37 @@ const logoutUser = async (req, res) => {
     throw Error("Error in logout user", error);
   }
 };
-const forgotPassword = async (req, res) => {};
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      res.status(404).json({ message: "User doesnot exists" });
+    }
+
+    const { unhashedToken, hashedToken, tokenExpiry } =
+      user.generateTemporaryToken();
+
+    user.forgotPasswordToken = hashedToken;
+    user.forgotPasswordExpiry = tokenExpiry;
+
+    await user.save({ validateBeforeSave: false });
+
+
+    
+
+
+
+
+  } catch (error) {}
+};
 const changeCurrentPassword = async (req, res) => {};
 const verifyEmail = async (req, res) => {};
 const getUser = async (req, res) => {};
+const assignRole = async (req, res) => {};
 
 export {
   registerUser,
@@ -161,4 +188,5 @@ export {
   changeCurrentPassword,
   verifyEmail,
   getUser,
+  assignRole,
 };
