@@ -1,8 +1,22 @@
 import { Product } from "../models/product.models.js";
 
 const getAllProduct = async (req, res) => {
+  const { brand, category, limit, offset, min, max, name } = req.query;
+  const sort = JSON.parse(query.sort || "{}");
+
+  const filters = {};
+
+  if (brand) filters.brand = { $in: brands.split(",") };
+  if (category) filters.category = category;
+  if (min) filters.price = { $gte: min };
+  if (max) filters.price = { ...filters.price, $lte: max };
+  if (name) filters.name = { $regex: name, $options: "i" };
+
   try {
-    const allProducts = await Product.find();
+    const allProducts = await Product.find(filters)
+      .sort(sort)
+      .limit(limit)
+      .skip(offset);
 
     return res.status(200).json({
       data: allProducts,

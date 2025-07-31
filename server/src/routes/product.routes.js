@@ -14,28 +14,18 @@ import { UserRoleEnum } from "../constants.js";
 
 const router = express.Router();
 
+const allowedRoles = [UserRoleEnum.ADMIN, UserRoleEnum.MERCHANT];
+
 router.route("/").get(getAllProduct);
 router.route("/:id").get(getAllProductById);
 router
   .route("/")
-  .post(
-    verifyJWT,
-    verifyPermission([UserRoleEnum.ADMIN], [UserRoleEnum.MERCHANT]),
-    createProduct
-  );
+  .post(verifyJWT, verifyPermission(allowedRoles), createProduct);
 router
   .route("/:id")
-  .put(
-    verifyJWT,
-    verifyPermission([UserRoleEnum.ADMIN], [UserRoleEnum.MERCHANT]),
-    updateProduct
-  );
+  .put(verifyJWT, verifyPermission(allowedRoles), updateProduct);
 router
   .route("/:id")
-  .delete(
-    verifyJWT,
-    verifyPermission([UserRoleEnum.ADMIN], [UserRoleEnum.MERCHANT]),
-    deleteProduct
-  );
+  .delete(verifyJWT, verifyPermission(allowedRoles), deleteProduct);
 
 export default router;

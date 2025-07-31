@@ -1,7 +1,6 @@
 import { UserRoleEnum } from "../constants";
 import { User } from "../models/user.models.js";
 import bcrypt from "bcryptjs";
-import crypto from "crypto";
 
 const generateAccessTokenAndRefreshToken = async (userId) => {
   try {
@@ -166,13 +165,6 @@ const forgotPassword = async (req, res) => {
     user.forgotPasswordExpiry = tokenExpiry;
 
     await user.save({ validateBeforeSave: false });
-
-
-    
-
-
-
-
   } catch (error) {}
 };
 const changeCurrentPassword = async (req, res) => {};
