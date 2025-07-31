@@ -5,3 +5,12 @@ export const UserRoleEnum = {
 };
 
 export const AvailableUserRoles = Object.values(UserRoleEnum);
+
+export const OrderStatusEnum = {
+  PENDING: "PENDING",
+  CANCELLED: "CANCELLED",
+  CONFIRMED: "CONFIRMED",
+  DELIVERED: "DELIVERED",
+};
+
+export const AvailableOrderStatuses = Object.values(OrderStatusEnum);
