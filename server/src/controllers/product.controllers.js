@@ -1,12 +1,15 @@
 import { Product } from "../models/product.models.js";
+import { asyncHandler } from "../utils/AasyncHander.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
-const getAllProduct = async (req, res) => {
+const getAllProduct = asyncHandler(async (req, res) => {
   const { brand, category, limit, offset, min, max, name } = req.query;
   const sort = JSON.parse(query.sort || "{}");
 
   const filters = {};
 
-  if (brand) filters.brand = { $in: brands.split(",") };
+  if (brand) filters.brand = { $in: brand.split(",") };
   if (category) filters.category = category;
   if (min) filters.price = { $gte: min };
   if (max) filters.price = { ...filters.price, $lte: max };
@@ -23,11 +26,11 @@ const getAllProduct = async (req, res) => {
       message: "All Products are fetched",
     });
   } catch (error) {
-    res.status(500).json({ message: "Error in fetching products", error });
+    throw new ApiError(404, "Product not found");
   }
-};
+});
 
-const getAllProductById = async (req, res) => {
+const getProductById = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
     const product = await Product.findById(id);
@@ -41,13 +44,15 @@ const getAllProductById = async (req, res) => {
       data: product,
     });
   } catch (error) {
-    res.status(500).json({ message: "Error in finding product by id:", error });
+    throw new ApiError(500, "Error in finding product by id:");
   }
-};
-const createProduct = async (req, res) => {
+});
+
+const createProduct = asyncHandler(async (req, res) => {
   const { name, price, imageUrls, category, stock, brand, description } =
     req.body;
   const owner = req.user._id;
+  const { files } = req.files;
 
   try {
     const product = await Product.create({
@@ -59,22 +64,26 @@ const createProduct = async (req, res) => {
       brand,
       description,
       owner,
+      files,
     });
 
-    res.status(201).json({ message: "new product is created", data: product });
+    res
+      .status(201)
+      .json(new ApiResponse(201, product, "successfully created new product"));
   } catch (error) {
     res.status(500).json({ message: "Error in creating product", error });
   }
-};
+});
 
-const updateProduct = async (req, res, userId) => {
+const updateProduct = asyncHandler(async (req, res) => {
   const { productId } = req.params;
   const { name, price, imageUrls, category, stock, brand, description } =
     req.body;
+  const { files } = req.files;
 
-  const product = await getAllProductById(productId);
+  const product = await Product.findById(productId);
 
-  if (product.owner != userId) {
+  if (product.owner != req.user?._id) {
     res.status(403).json({ message: "Access denied" });
   }
   try {
@@ -89,6 +98,7 @@ const updateProduct = async (req, res, userId) => {
           stock,
           brand,
           description,
+          files,
         },
       },
       { new: true }
@@ -101,31 +111,30 @@ const updateProduct = async (req, res, userId) => {
   } catch (error) {
     res.status(500).json({ message: "Error in update product", error });
   }
-};
-const deleteProduct = async (req, res, userId) => {
+});
+const deleteProduct = asyncHandler(async (req, res) => {
   const { productId } = req.params;
 
-  const product = await getAllProductById(productId);
+  const product = await Product.findById(productId);
 
-  if (product.owner != userId) {
+  if (product.owner != req.user?._id) {
     res.status(403).json({ message: "Access denied" });
   }
 
   try {
     const deletedProduct = await Product.findByIdAndDelete(productId);
 
-    res.status(200).json({
-      message: "product deleted",
-      data: deletedProduct,
-    });
+    res
+      .status(200)
+      .json(new ApiResponse(200, deletedProduct, "Successfully deleted"));
   } catch (error) {
-    res.status(500).json({ message: "error in delete product", error });
+    throw new ApiError(500, "Error in delete product", error);
   }
-};
+});
 
 export {
   getAllProduct,
-  getAllProductById,
+  getProductById,
   createProduct,
   updateProduct,
   deleteProduct,

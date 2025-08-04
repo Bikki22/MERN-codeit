@@ -1,6 +1,9 @@
 import { UserRoleEnum } from "../constants";
 import { User } from "../models/user.models.js";
 import bcrypt from "bcryptjs";
+import { asyncHandler } from "../utils/AasyncHander.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const generateAccessTokenAndRefreshToken = async (userId) => {
   try {
@@ -19,7 +22,7 @@ const generateAccessTokenAndRefreshToken = async (userId) => {
   }
 };
 
-const registerUser = async (req, res) => {
+const registerUser = asyncHandler(async (req, res) => {
   const { username, fullname, email, password } = req.body;
 
   try {
@@ -81,8 +84,8 @@ const registerUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "somethign went wrong in registering " });
   }
-};
-const loginUser = async (req, res) => {
+});
+const loginUser = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
 
   try {
@@ -111,12 +114,17 @@ const loginUser = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     };
 
-    res.cookie("accessToken", accessToken, options);
-    res.cookie("refreshToken", refreshToken, options);
-    return res.status(200).json({ message: "Logged in successfully" });
-  } catch (error) {}
-};
-const logoutUser = async (req, res) => {
+    res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json(new ApiResponse(200, user, "Logged in successfully"));
+  } catch (error) {
+    throw new ApiError(400, "login failed");
+  }
+});
+
+const logoutUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
     const user = await User.findByIdAndUpdate(
@@ -146,7 +154,7 @@ const logoutUser = async (req, res) => {
   } catch (error) {
     throw Error("Error in logout user", error);
   }
-};
+});
 
 const forgotPassword = async (req, res) => {
   try {
@@ -161,16 +169,37 @@ const forgotPassword = async (req, res) => {
     const { unhashedToken, hashedToken, tokenExpiry } =
       user.generateTemporaryToken();
 
+    // Email sender
+
     user.forgotPasswordToken = hashedToken;
     user.forgotPasswordExpiry = tokenExpiry;
 
     await user.save({ validateBeforeSave: false });
   } catch (error) {}
 };
-const changeCurrentPassword = async (req, res) => {};
-const verifyEmail = async (req, res) => {};
-const getUser = async (req, res) => {};
-const assignRole = async (req, res) => {};
+const changeCurrentPassword = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+
+  const user = await User.findById(req.user?._id);
+
+  const isPasswordValid = await user.isPasswordCorrect(oldPassword);
+
+  if (!isPasswordValid) {
+    throw new ApiError(400, "Invalid Old password");
+  }
+
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password changed successfully"));
+});
+const getUser = asyncHandler(async (req, res) => {
+  return res
+    .json(200)
+    .json(new ApiResponse(200, req.user, "Current user fetched successfully"));
+});
 
 export {
   registerUser,
@@ -178,7 +207,5 @@ export {
   logoutUser,
   forgotPassword,
   changeCurrentPassword,
-  verifyEmail,
   getUser,
-  assignRole,
 };

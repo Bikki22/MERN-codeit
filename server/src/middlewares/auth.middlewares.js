@@ -43,7 +43,7 @@ export const verifyPermission = (roles = []) => {
   };
 };
 
-const getLoggedInUser = asyncHandler(async (req, res) => {
+export const getLoggedInUser = asyncHandler(async (req, res) => {
   const token =
     req.cookies?.accessToken ||
     req.header("Authorization")?.replace("Bearer ", "");

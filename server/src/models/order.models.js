@@ -1,8 +1,17 @@
 import mongoose from "mongoose";
-import { AvailableOrderStatuses, OrderStatusEnum } from "../constants";
+import {
+  AvailableOrderStatuses,
+  AvailablePaymentProvider,
+  OrderStatusEnum,
+  PaymentProviderEnum,
+} from "../constants";
 
 const orderSchema = new mongoose.Schema(
   {
+    totalPrice: {
+      type: Number,
+      required: true,
+    },
     orderId: {
       type: Number,
       required: true,
@@ -14,7 +23,7 @@ const orderSchema = new mongoose.Schema(
     items: {
       type: [
         {
-          productId: {
+          product: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Product",
             required: true,
@@ -33,10 +42,6 @@ const orderSchema = new mongoose.Schema(
       default: OrderStatusEnum.PENDING,
       enum: AvailableOrderStatuses,
     },
-    totalPrice: {
-      type: Number,
-      required: true,
-    },
     shippingAddress: {
       city: {
         type: String,
@@ -54,6 +59,18 @@ const orderSchema = new mongoose.Schema(
       street: {
         type: String,
       },
+    },
+    paymentProvider: {
+      type: String,
+      enum: AvailablePaymentProvider,
+      default: PaymentProviderEnum.KHALTI,
+    },
+    paymentId: {
+      type: String,
+    },
+    isPaymentDone: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

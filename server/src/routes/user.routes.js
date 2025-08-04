@@ -6,7 +6,6 @@ import {
   loginUser,
   logoutUser,
   registerUser,
-  verifyEmail,
 } from "../controllers/user.controllers.js";
 import {
   userChangeCurrentPasswordValidator,
@@ -26,7 +25,6 @@ router
 router
   .route("/change-password")
   .post(userChangeCurrentPasswordValidator, changeCurrentPassword);
-router.route("/verify-email").post(verifyEmail);
 router.route("/user").post(getUser);
 
 export default router;

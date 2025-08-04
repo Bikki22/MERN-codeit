@@ -3,7 +3,7 @@ import {
   createProduct,
   deleteProduct,
   getAllProduct,
-  getAllProductById,
+  getProductById,
   updateProduct,
 } from "../controllers/product.controllers.js";
 import {
@@ -17,7 +17,7 @@ const router = express.Router();
 const allowedRoles = [UserRoleEnum.ADMIN, UserRoleEnum.MERCHANT];
 
 router.route("/").get(getAllProduct);
-router.route("/:id").get(getAllProductById);
+router.route("/:id").get(getProductById);
 router
   .route("/")
   .post(verifyJWT, verifyPermission(allowedRoles), createProduct);

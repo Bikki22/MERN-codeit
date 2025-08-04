@@ -14,3 +14,11 @@ export const OrderStatusEnum = {
 };
 
 export const AvailableOrderStatuses = Object.values(OrderStatusEnum);
+
+export const PaymentProviderEnum = {
+  UNKNOWN: "UNKNOWN",
+  ESEWA: "ESEWA",
+  KHALTI: "KHALTI",
+};
+
+export const AvailablePaymentProvider = Object.values(PaymentProviderEnum);
