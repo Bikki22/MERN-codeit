@@ -3,11 +3,13 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import connectDB from "./db/db.js";
 import multer from "multer";
+import cookieParser from "cookie-parser";
+import connectCloudinary from "./config/cloudinary.js";
 
 // routes
 import productRouter from "./routes/product.routes.js";
 import userRouter from "./routes/user.routes.js";
-import connectCloudinary from "./config/cloudinary.js";
+import orderRoutes from "./routes/order.routes.js";
 
 const app = express();
 dotenv.config();
@@ -20,6 +22,7 @@ const PORT = process.env.PORT ?? 5000;
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Hello world!!");
@@ -27,6 +30,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/product", upload.array("images", 5), productRouter);
 app.use("/api/v1/auth", userRouter);
+app.use("/apip/v1/orders", orderRoutes);
 
 app.listen(PORT, () => {
   connectDB();

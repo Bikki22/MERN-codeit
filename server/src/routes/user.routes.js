@@ -2,7 +2,7 @@ import express from "express";
 import {
   changeCurrentPassword,
   forgotPassword,
-  getUser,
+  getUsers,
   loginUser,
   logoutUser,
   registerUser,
@@ -13,6 +13,11 @@ import {
   userLoginValidator,
   userRegisterValidation,
 } from "../validators/user.validation.js";
+import {
+  verifyJWT,
+  verifyPermission,
+} from "../middlewares/auth.middlewares.js";
+import { UserRoleEnum } from "../constants.js";
 
 const router = express.Router();
 
@@ -24,7 +29,9 @@ router
   .post(userForgotPasswordValidator, forgotPassword);
 router
   .route("/change-password")
-  .post(userChangeCurrentPasswordValidator, changeCurrentPassword);
-router.route("/user").post(getUser);
+  .post(userChangeCurrentPasswordValidator(), changeCurrentPassword);
+router
+  .route("/users")
+  .get(verifyJWT, verifyPermission([UserRoleEnum.ADMIN]), getUsers);
 
 export default router;

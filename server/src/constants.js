@@ -22,3 +22,11 @@ export const PaymentProviderEnum = {
 };
 
 export const AvailablePaymentProvider = Object.values(PaymentProviderEnum);
+
+export const PaymentStatusEnum = {
+  PENDING: "PENDING",
+  COMPLETED: "COMPLETED",
+  FAILED: "FAILED",
+};
+
+export const AvailablePaymentStatus = Object.values(PaymentStatusEnum);

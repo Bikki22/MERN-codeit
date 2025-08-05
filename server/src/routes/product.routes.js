@@ -26,6 +26,6 @@ router
   .put(verifyJWT, verifyPermission(allowedRoles), updateProduct);
 router
   .route("/:id")
-  .delete(verifyJWT, verifyPermission(allowedRoles), deleteProduct);
+  .delete(verifyJWT, verifyPermission([UserRoleEnum.ADMIN]), deleteProduct);
 
 export default router;

@@ -4,6 +4,7 @@ import {
   AvailablePaymentProvider,
   OrderStatusEnum,
   PaymentProviderEnum,
+  PaymentStatusEnum,
 } from "../constants";
 
 const orderSchema = new mongoose.Schema(
@@ -37,11 +38,6 @@ const orderSchema = new mongoose.Schema(
       ],
       default: [],
     },
-    status: {
-      type: String,
-      default: OrderStatusEnum.PENDING,
-      enum: AvailableOrderStatuses,
-    },
     shippingAddress: {
       city: {
         type: String,
@@ -60,17 +56,10 @@ const orderSchema = new mongoose.Schema(
         type: String,
       },
     },
-    paymentProvider: {
+    status: {
       type: String,
-      enum: AvailablePaymentProvider,
-      default: PaymentProviderEnum.KHALTI,
-    },
-    paymentId: {
-      type: String,
-    },
-    isPaymentDone: {
-      type: Boolean,
-      default: false,
+      default: OrderStatusEnum.PENDING,
+      enum: AvailableOrderStatuses,
     },
   },
   { timestamps: true }

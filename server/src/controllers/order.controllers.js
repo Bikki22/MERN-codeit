@@ -1,3 +1,4 @@
+import { OrderStatusEnum, PaymentStatusEnum } from "../constants.js";
 import { Order } from "../models/order.models.js";
 import { asyncHandler } from "../utils/AasyncHander.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -51,4 +52,72 @@ const deleteOrder = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, deletedOrder, "Order deleted Successfully"));
 });
 
-export { getOrders, createOrder, deleteOrder, getOrderById };
+const orderPaymentViaKhalti = asyncHandler(async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    const order = await Order.findById(id);
+
+    const transactionId = crypto.randomUUID();
+
+    const orderPayment = await Payment.create({
+      amount: order.totalPrice,
+      method: "online",
+      transactionId,
+    });
+
+    await Order.findByIdAndUpdate(id, {
+      payment: orderPayment._id,
+    });
+
+    return await payment.payViaKhalti({
+      amount: order.totalPrice,
+      purchaseOrderId: order.id,
+      purchaseOrderName: order.orderNumber,
+      customer: order.user,
+    });
+  } catch (error) {
+    throw new ApiError(400, "Error in payment", error);
+  }
+});
+
+const confirmOrderPayment = asyncHandler(async (req, res) => {
+  const { id } = req.params.id;
+  const { status } = req.body;
+
+  try {
+    const order = Order.findById(id);
+
+    if (status.toUpperCase() != PaymentStatusEnum.COMPLETED) {
+      await Payment.findByIdAndUpdate(order.payment._id, {
+        status: "failed",
+      });
+      throw new ApiError(400, "Payment failed");
+    }
+
+    await Payment.findByIdAndUpdate(order.payment._id, {
+      status: PaymentStatusEnum.COMPLETED,
+    });
+
+    return await Order.findByIdAndUpdate(
+      id,
+      {
+        status: OrderStatusEnum.CONFIRMED,
+      },
+      {
+        new: ture,
+      }
+    );
+  } catch (error) {
+    throw new ApiError(400, "Error in confirming", error);
+  }
+});
+
+export {
+  getOrders,
+  createOrder,
+  deleteOrder,
+  getOrderById,
+  orderPaymentViaKhalti,
+  confirmOrderPayment,
+};
