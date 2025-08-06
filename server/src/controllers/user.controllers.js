@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { asyncHandler } from "../utils/AasyncHander.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { forgotPasswordMailgenContent, sendMail } from "../utils/mail.js";
 
 const generateAccessTokenAndRefreshToken = async (userId) => {
   try {
@@ -44,18 +45,18 @@ const registerUser = asyncHandler(async (req, res) => {
 
   await user.save({ validateBeforeSave: false });
 
-  const createUser = await User.findById(user._id).select(
+  const createdUser = await User.findById(user._id).select(
     "-password -emailVerificationToken -emailVerificationExpiry"
   );
 
-  if (!createUser) {
+  if (!createdUser) {
     throw new ApiError(400, "User is not created");
   }
 
   return res
     .status(201)
     .json(
-      new ApiResponse(200, { user: createUser }, "User created successfully.")
+      new ApiResponse(200, { user: createdUser }, "User created successfully.")
     );
 });
 const loginUser = asyncHandler(async (req, res) => {
@@ -127,32 +128,78 @@ const logoutUser = asyncHandler(async (req, res) => {
     .status(200)
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
-    .json(new ApiResponse(200, {}, "User logged out successfully"));
+    .json(new ApiResponse(200, { user }, "User logged out successfully"));
 });
 
-const forgotPassword = async (req, res) => {
-  try {
-    const { email } = req.body;
+const forgotPasswordRequest = asyncHandler(async (req, res) => {
+  const { email } = req.body;
 
-    const user = await User.findOne({ email });
+  const user = await User.findOne({ email });
 
-    if (!user) {
-      throw new ApiError(404, "user doesnot exist");
-    }
+  if (!user) {
+    throw new ApiError(404, "user doesnot exist");
+  }
 
-    const { unhashedToken, hashedToken, tokenExpiry } =
-      user.generateTemporaryToken();
+  const { unhashedToken, hashedToken, tokenExpiry } =
+    user.generateTemporaryToken();
 
-    // Email sender
+  user.forgotPasswordToken = hashedToken;
+  user.forgotPasswordExpiry = tokenExpiry;
 
-    user.forgotPasswordToken = hashedToken;
-    user.forgotPasswordExpiry = tokenExpiry;
+  await user.save({ validateBeforeSave: false });
 
-    await user.save({ validateBeforeSave: false });
-  } catch (error) {}
-};
+  // Email sending
+  await sendMail({
+    email: user?.email,
+    subject: "Forgot password request",
+    mailgenContent: forgotPasswordMailgenContent(
+      user.username,
+      `${process.env.FORGOT_PASSWORD_REDIRECT_URL}/${unhashedToken}`
+    ),
+  });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        {},
+        "Password reset mail has been sent to your mail id"
+      )
+    );
+});
+
+const resetForgottenPassword = asyncHandler(async (req, res) => {
+  const { resetToken } = req.params;
+  const { newPassword } = req.body;
+
+  let hashedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  const user = await User.findOne({
+    forgotPasswordToken: hashedToken,
+    forgotPasswordExpiry: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    throw new ApiError(489, "Token is invalid or expired");
+  }
+
+  user.forgotPasswordToken = undefined;
+  user.forgotPasswordExpiry = undefined;
+
+  user.password = newPassword;
+
+  await user.save({ validateBeforeSave: false });
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "password reset successfully"));
+});
+
 const changeCurrentPassword = asyncHandler(async (req, res) => {
-  const { oldPassword, newPassword } = req.body;
+  const { oldPassword, newPassword, confirmPassword } = req.body;
 
   const user = await User.findById(req.user?._id);
 
@@ -160,6 +207,10 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 
   if (!isPasswordValid) {
     throw new ApiError(400, "Invalid Old password");
+  }
+
+  if (password !== confirmPassword) {
+    throw new ApiError(400, "password and confirm password donot match");
   }
 
   user.password = newPassword;
@@ -179,7 +230,8 @@ export {
   registerUser,
   loginUser,
   logoutUser,
-  forgotPassword,
+  forgotPasswordRequest,
+  resetForgottenPassword,
   changeCurrentPassword,
   getUsers,
 };
