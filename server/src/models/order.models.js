@@ -5,7 +5,7 @@ import {
   OrderStatusEnum,
   PaymentProviderEnum,
   PaymentStatusEnum,
-} from "../constants";
+} from "../constants.js";
 
 const orderSchema = new mongoose.Schema(
   {

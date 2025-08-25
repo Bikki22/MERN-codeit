@@ -6,6 +6,8 @@ export const UserRoleEnum = {
 
 export const AvailableUserRoles = Object.values(UserRoleEnum);
 
+export const USER_TEMPORARY_TOKEN_EXPIRY = 20 * 60 * 1000; // 20 minutes
+
 export const OrderStatusEnum = {
   PENDING: "PENDING",
   CANCELLED: "CANCELLED",
@@ -30,3 +32,6 @@ export const PaymentStatusEnum = {
 };
 
 export const AvailablePaymentStatus = Object.values(PaymentStatusEnum);
+
+export const PRODUCT_DESCRIPTION_PROMPT =
+  "Write a compelling and SEO-friendly product description for my e-commerce store. Follow these details: Name: %s, Brand: %s, Category: %s. Make the description engaging, highlight benefits. Ignore extra messages.";

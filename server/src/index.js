@@ -5,6 +5,7 @@ import connectDB from "./db/db.js";
 import multer from "multer";
 import cookieParser from "cookie-parser";
 import connectCloudinary from "./config/cloudinary.js";
+import cors from "cors";
 
 // routes
 import productRouter from "./routes/product.routes.js";
@@ -19,6 +20,14 @@ connectCloudinary();
 
 const PORT = process.env.PORT ?? 5000;
 
+app.use(
+  cors({
+    // origin: "process.env.BASE_URI",
+    credentials: true,
+    methods: ["GET", "POST", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
@@ -28,8 +37,8 @@ app.get("/", (req, res) => {
   res.send("Hello world!!");
 });
 
-app.use("/api/v1/product", upload.array("images", 5), productRouter);
 app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/product", upload.array("images", 5), productRouter);
 app.use("/apip/v1/orders", orderRoutes);
 
 app.listen(PORT, () => {

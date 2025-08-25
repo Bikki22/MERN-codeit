@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
-import { AvailableUserRoles, UserRoleEnum } from "../constants.js";
+import {
+  AvailableUserRoles,
+  USER_TEMPORARY_TOKEN_EXPIRY,
+  UserRoleEnum,
+} from "../constants.js";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
@@ -11,11 +15,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
       lowercase: true,
-    },
-    fullname: {
-      type: String,
-      required: true,
-      trim: true,
     },
     email: {
       type: String,
@@ -30,12 +29,15 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
     role: {
-      type: String,
-      default: UserRoleEnum.USER,
+      type: [String],
       enum: AvailableUserRoles,
-      requried: true,
+      default: [UserRoleEnum.USER],
     },
     address: {
+      province: {
+        type: String,
+        required: true,
+      },
       city: {
         type: String,
         required: true,
@@ -44,16 +46,21 @@ const userSchema = new mongoose.Schema(
         type: String,
         default: "Nepal",
       },
+      street: {
+        type: String,
+      },
     },
-    emailVerificationToken: {
+    phone: {
       type: String,
-    },
-    emailVerificationExpiry: {
-      type: String,
-    },
-    isEmailVerified: {
-      type: Boolean,
-      required: true,
+      requried: true,
+      // validate: {
+      //   validator: (value) => {
+      //     const phoneRegex = process.env.PHONE_REGEX;
+      //     return phoneRegex.test(value);
+      //   },
+      //   message: "Invalid email address.",
+      // },
+      unique: true,
     },
     forgotPasswordToken: {
       type: String,
@@ -66,28 +73,31 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
-userSchema.method.isPasswordCorrect = async function (password) {
-  return await bcrypt.compare(password, this.password);
+userSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    { _id: this._id, role: this.role },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIREY_TIME,
+    }
+  );
+};
+userSchema.methods.generateRefreshToken = function () {
+  return jwt.sign(
+    { _id: this._id, role: this.role },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: process.env.REFRESH_TOKEN_EXPIREY_TIME,
+    }
+  );
 };
 
-userSchema.method.generateAccessToken = function () {
-  return jwt.sign({ id: userSchema._id }, process.env.ACCESS_TOKEN, {
-    expiresIn: process.env.ACCESS_TOKEN_EXPIREY_TIME,
-  });
-};
-userSchema.method.generateRefreshToken = function () {
-  return jwt.sign({ id: userSchema._id }, process.env.REFRESH_TOKEN, {
-    expiresIn: process.env.REFRESH_TOKEN_EXPIREY_TIME,
-  });
-};
-
-userSchema.method.generateTemporaryToken = function () {
+userSchema.methods.generateTemporaryToken = function () {
   const unhashedToken = crypto.randomBytes(20).toString("hex");
 
   const hashedToken = crypto

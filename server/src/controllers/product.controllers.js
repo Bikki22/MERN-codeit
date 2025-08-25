@@ -1,7 +1,9 @@
+import { PRODUCT_DESCRIPTION_PROMPT, UserRoleEnum } from "../constants.js";
 import { Product } from "../models/product.models.js";
 import { asyncHandler } from "../utils/AasyncHander.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import promptGemini from "../utils/gemini.js";
 
 const getAllProduct = asyncHandler(async (req, res) => {
   const { brand, category, limit, offset, min, max, name } = req.query;
@@ -52,65 +54,71 @@ const createProduct = asyncHandler(async (req, res) => {
   const { name, price, imageUrls, category, stock, brand, description } =
     req.body;
   const owner = req.user._id;
-  const { files } = req.files;
+  const files = req.files;
 
-  try {
-    const product = await Product.create({
-      name,
-      price,
-      imageUrls,
-      category,
-      stock,
-      brand,
-      description,
-      owner,
-      files,
-    });
+  const promptMessage = PRODUCT_DESCRIPTION_PROMPT.replace("%s", name)
+    .replace("%s", brand)
+    .replace("%s", category);
 
-    res
-      .status(201)
-      .json(new ApiResponse(201, product, "successfully created new product"));
-  } catch (error) {
-    res.status(500).json({ message: "Error in creating product", error });
-  }
+  const productDescription = description ?? (await promptGemini(promptMessage));
+
+  const product = await Product.create({
+    name,
+    price,
+    imageUrls,
+    category,
+    stock,
+    brand,
+    productDescription,
+    owner,
+    files,
+  });
+
+  res
+    .status(201)
+    .json(new ApiResponse(201, product, "successfully created new product"));
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
   const { productId } = req.params;
   const { name, price, imageUrls, category, stock, brand, description } =
     req.body;
-  const { files } = req.files;
+  const files = req.files;
 
   const product = await Product.findById(productId);
 
-  if (product.owner != req.user?._id) {
-    res.status(403).json({ message: "Access denied" });
+  if (
+    product.owner != req.user?._id &&
+    !req.user?.roles?.includes(UserRoleEnum.ADMIN)
+  ) {
+    throw new ApiError(403, "Access denied");
   }
-  try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      productId,
-      {
-        $set: {
-          name,
-          price,
-          imageUrls,
-          category,
-          stock,
-          brand,
-          description,
-          files,
-        },
+  const updatedProduct = await Product.findByIdAndUpdate(
+    productId,
+    {
+      $set: {
+        name,
+        price,
+        imageUrls,
+        category,
+        stock,
+        brand,
+        description,
+        files,
       },
-      { new: true }
-    );
+    },
+    { new: true }
+  );
 
-    res.status(200).json({
-      message: "Product detail updated successfully",
-      data: updatedProduct,
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Error in update product", error });
-  }
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        updatedProduct,
+        "Product detail updated successfully"
+      )
+    );
 });
 const deleteProduct = asyncHandler(async (req, res) => {
   const { productId } = req.params;

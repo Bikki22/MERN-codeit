@@ -6,8 +6,11 @@ import {
   getOrders,
   orderPaymentViaKhalti,
 } from "../controllers/order.controllers.js";
-import { verifyJWT, verifyPermission } from "../middlewares/auth.middlewares";
-import { UserRoleEnum } from "../constants";
+import {
+  verifyJWT,
+  verifyPermission,
+} from "../middlewares/auth.middlewares.js";
+import { UserRoleEnum } from "../constants.js";
 
 const router = express.Router();
 

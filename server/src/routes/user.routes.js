@@ -1,8 +1,9 @@
 import express from "express";
 import {
   changeCurrentPassword,
-  forgotPassword,
-  getUsers,
+  forgotPasswordRequest,
+  getAllUsers,
+  getUserProfile,
   loginUser,
   logoutUser,
   registerUser,
@@ -17,21 +18,19 @@ import {
   verifyJWT,
   verifyPermission,
 } from "../middlewares/auth.middlewares.js";
-import { UserRoleEnum } from "../constants.js";
 
 const router = express.Router();
 
-router.route("/register").post(userRegisterValidation, registerUser);
-router.route("/login").post(userLoginValidator, loginUser);
-router.route("/logout").post(logoutUser);
+router.route("/register").post(userRegisterValidation(), registerUser);
+router.route("/login").post(userLoginValidator(), loginUser);
+router.route("/logout").post(verifyJWT, logoutUser);
 router
   .route("/forgot-password")
-  .post(userForgotPasswordValidator, forgotPassword);
+  .post(userForgotPasswordValidator(), forgotPasswordRequest);
 router
   .route("/change-password")
-  .post(userChangeCurrentPasswordValidator(), changeCurrentPassword);
-router
-  .route("/users")
-  .get(verifyJWT, verifyPermission([UserRoleEnum.ADMIN]), getUsers);
+  .put(userChangeCurrentPasswordValidator(), changeCurrentPassword);
+router.route("/profile").get(verifyJWT, getUserProfile);
+router.route("/users").get(verifyJWT, verifyPermission(["ADMIN"]), getAllUsers);
 
 export default router;

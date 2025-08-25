@@ -1,4 +1,3 @@
-import { UserRoleEnum } from "../constants";
 import { User } from "../models/user.models.js";
 import bcrypt from "bcryptjs";
 import { asyncHandler } from "../utils/AasyncHander.js";
@@ -17,72 +16,44 @@ const generateAccessTokenAndRefreshToken = async (userId) => {
     await user.save({ validateBeforeSave: false });
     return { accessToken, refreshToken };
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Something went wrong while creating a access token" });
+    throw new ApiError(
+      500,
+      "Somwthing went wrong in creating access and refresh token"
+    );
   }
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, fullname, email, password } = req.body;
+  const { username, email, password, confirmPassword, address, phone, role } =
+    req.body;
+
+  if (!confirmPassword) {
+    throw new ApiError(400, "confirm pass is required");
+  }
+
+  if (password !== confirmPassword) {
+    throw new ApiError(400, "password and confirm password must be same");
+  }
 
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
-    throw new Error("User already exists");
+    throw new ApiError(400, "User already exists");
   }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await User.create({
     username,
-    fullname,
     email,
-    password: hashedPassword,
-    isEmailVerified: false,
-    role: role || UserRoleEnum.USER,
+    password,
+    address,
+    phone,
+    role,
   });
+
+  const { accessToken, refreshToken } =
+    await generateAccessTokenAndRefreshToken(user._id);
 
   await user.save({ validateBeforeSave: false });
-
-  const createdUser = await User.findById(user._id).select(
-    "-password -emailVerificationToken -emailVerificationExpiry"
-  );
-
-  if (!createdUser) {
-    throw new ApiError(400, "User is not created");
-  }
-
-  return res
-    .status(201)
-    .json(
-      new ApiResponse(200, { user: createdUser }, "User created successfully.")
-    );
-});
-const loginUser = asyncHandler(async (req, res) => {
-  const { email, username, password } = req.body;
-
-  const user = await User.findOne({
-    $or: [{ username }, { email }],
-  });
-
-  if (!user) {
-    res.status(404).json({ message: "User not found" });
-  }
-
-  const isPasswordValid = await user.isPasswordCorrect(password);
-
-  if (!isPasswordValid) {
-    throw new ApiError(401, "User credentials are not valid.");
-  }
-
-  const { accessToken, refreshToken } = generateAccessTokenAndRefreshToken(
-    user._id
-  );
-
-  const loggedInUser = await User.findById(user._id).select(
-    "-password -refreshToken"
-  );
 
   const options = {
     httpOnly: true,
@@ -91,7 +62,51 @@ const loginUser = asyncHandler(async (req, res) => {
     maxAge: 24 * 60 * 60 * 1000,
   };
 
-  res
+  return res
+    .status(201)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(
+        200,
+        { user: user, accessToken, refreshToken },
+        "User created successfully."
+      )
+    );
+});
+
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new ApiError(400, "email and password is required");
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    throw new ApiError(401, "Invalid password");
+  }
+
+  const { accessToken, refreshToken } =
+    await generateAccessTokenAndRefreshToken(user._id);
+
+  const loggedInUser = await User.findById(user._id).select("-password");
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "Strict",
+    maxAge: 24 * 60 * 60 * 1000,
+  };
+
+  return res
     .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
@@ -105,39 +120,34 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const user = await User.findByIdAndUpdate(
-    id,
+  await User.findByIdAndUpdate(
+    req.user._id,
     {
-      $set: {
-        refreshToken: "",
-        accessToken: "",
-      },
+      $set: { refreshToken: "" },
     },
-    {
-      new: true,
-    }
+    { new: true }
   );
 
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Strict",
   };
 
   return res
     .status(200)
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
-    .json(new ApiResponse(200, { user }, "User logged out successfully"));
+    .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
 
 const forgotPasswordRequest = asyncHandler(async (req, res) => {
   const { email } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: email.toLowerCase() });
 
   if (!user) {
-    throw new ApiError(404, "user doesnot exist");
+    throw new ApiError(404, "email doesnot exists");
   }
 
   const { unhashedToken, hashedToken, tokenExpiry } =
@@ -148,15 +158,21 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
 
   await user.save({ validateBeforeSave: false });
 
-  // Email sending
-  await sendMail({
-    email: user?.email,
-    subject: "Forgot password request",
-    mailgenContent: forgotPasswordMailgenContent(
-      user.username,
-      `${process.env.FORGOT_PASSWORD_REDIRECT_URL}/${unhashedToken}`
-    ),
-  });
+  try {
+    await sendMail({
+      email: user?.email,
+      subject: "Forgot password request",
+      mailgenContent: forgotPasswordMailgenContent(
+        user.username,
+        `${process.env.FORGOT_PASSWORD_REDIRECT_URL}/${unhashedToken}`
+      ),
+    });
+  } catch (err) {
+    user.forgotPasswordToken = undefined;
+    user.forgotPasswordExpiry = undefined;
+    await user.save({ validateBeforeSave: false });
+    throw new ApiError(500, "Failed to send reset email, please try again.");
+  }
 
   return res
     .status(200)
@@ -173,7 +189,7 @@ const resetForgottenPassword = asyncHandler(async (req, res) => {
   const { resetToken } = req.params;
   const { newPassword } = req.body;
 
-  let hashedToken = crypto
+  const hashedToken = crypto
     .createHash("sha256")
     .update(resetToken)
     .digest("hex");
@@ -184,11 +200,13 @@ const resetForgottenPassword = asyncHandler(async (req, res) => {
   });
 
   if (!user) {
-    throw new ApiError(489, "Token is invalid or expired");
+    throw new ApiError(400, "Token is invalid or expired");
   }
 
   user.forgotPasswordToken = undefined;
   user.forgotPasswordExpiry = undefined;
+
+  user.refreshToken = "";
 
   user.password = newPassword;
 
@@ -206,24 +224,34 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
   const isPasswordValid = await user.isPasswordCorrect(oldPassword);
 
   if (!isPasswordValid) {
-    throw new ApiError(400, "Invalid Old password");
+    throw new ApiError(400, "Invalid old password");
   }
 
-  if (password !== confirmPassword) {
-    throw new ApiError(400, "password and confirm password donot match");
+  if (newPassword !== confirmPassword) {
+    throw new ApiError(400, "New password and confirm password do not match");
   }
+
+  user.refreshToken = "";
 
   user.password = newPassword;
-  await user.save({ validateBeforeSave: false });
+  await user.save();
 
   return res
     .status(200)
     .json(new ApiResponse(200, {}, "Password changed successfully"));
 });
-const getUsers = asyncHandler(async (req, res) => {
+
+const getUserProfile = asyncHandler(async (req, res) => {
   return res
-    .json(200)
+    .status(200)
     .json(new ApiResponse(200, req.user, "Current user fetched successfully"));
+});
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, users, "successfully fetched all users"));
 });
 
 export {
@@ -233,5 +261,6 @@ export {
   forgotPasswordRequest,
   resetForgottenPassword,
   changeCurrentPassword,
-  getUsers,
+  getUserProfile,
+  getAllUsers,
 };

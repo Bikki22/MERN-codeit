@@ -1,5 +1,5 @@
 import { body } from "express-validator";
-import { AvailableUserRoles } from "../constants.js";
+import { AvailableUserRoles, UserRoleEnum } from "../constants.js";
 
 const userRegisterValidation = () => {
   return [
@@ -25,20 +25,21 @@ const userRegisterValidation = () => {
       .withMessage("strong password is required"),
     body("role")
       .optional()
-      .isIn(AvailableUserRoles)
-      .withMessage("Invalid user roles"),
+      .isArray()
+      .withMessage("Roles must be an array")
+      .custom((roles) => {
+        roles.forEach((role) => {
+          if (!AvailableUserRoles.includes(role)) {
+            throw new Error(`Invalid role: ${role}`);
+          }
+        });
+        return true;
+      }),
   ];
 };
 
 const userLoginValidator = () => {
   return [
-    body("username")
-      .optional()
-      .trim()
-      .notEmpty()
-      .withMessage("username is required")
-      .isLowercase()
-      .withMessage("username must be in lower case"),
     body("email")
       .trim()
       .notEmpty()

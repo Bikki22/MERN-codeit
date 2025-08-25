@@ -1,4 +1,4 @@
-import { ApiError } from "./ApiError";
+import { ApiError } from "./ApiError.js";
 import axios from "axios";
 
 const payViaKhalti = async (data) => {
