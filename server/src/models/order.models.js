@@ -13,31 +13,25 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    orderId: {
-      type: Number,
-      required: true,
-    },
     customer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    items: {
-      type: [
-        {
-          product: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product",
-            required: true,
-          },
-          quantity: {
-            type: Number,
-            min: [1, "Quantity cannot be less than 1"],
-            default: 1,
-          },
+    items: [
+      {
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
         },
-      ],
-      default: [],
-    },
+        quantity: {
+          type: Number,
+          min: [1, "Quantity cannot be less than 1"],
+          default: 1,
+        },
+      },
+    ],
+
     shippingAddress: {
       city: {
         type: String,
@@ -45,12 +39,11 @@ const orderSchema = new mongoose.Schema(
       },
       country: {
         type: String,
-        required: true,
+        default: "Nepal",
       },
       province: {
         type: String,
         required: true,
-        default: "Nepal",
       },
       street: {
         type: String,

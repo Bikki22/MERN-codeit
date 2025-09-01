@@ -3,8 +3,10 @@ import {
   confirmOrderPayment,
   createOrder,
   deleteOrder,
+  getOrderById,
   getOrders,
   orderPaymentViaKhalti,
+  updateOrder,
 } from "../controllers/order.controllers.js";
 import {
   verifyJWT,
@@ -17,7 +19,12 @@ const router = express.Router();
 router
   .route("/")
   .get(verifyJWT, verifyPermission([UserRoleEnum.ADMIN]), getOrders);
+router
+  .route("/:id")
+  .get(verifyJWT, verifyPermission([UserRoleEnum.ADMIN]), getOrderById);
+
 router.route("/").post(verifyJWT, createOrder);
+router.route("/:id").put(verifyJWT, updateOrder);
 router
   .route("/:id")
   .delete(verifyJWT, verifyPermission([UserRoleEnum.ADMIN]), deleteOrder);

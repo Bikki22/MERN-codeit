@@ -5,7 +5,7 @@ const createProductValidator = () => {
     body("name").trim().notEmpty().withMessage("Name is required"),
     body("description")
       .trim()
-      .notEmpty()
+      .optional()
       .withMessage("description is required"),
     body("price")
       .trim()

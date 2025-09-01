@@ -1,4 +1,8 @@
-import { OrderStatusEnum, PaymentStatusEnum } from "../constants.js";
+import {
+  OrderStatusEnum,
+  PaymentStatusEnum,
+  UserRoleEnum,
+} from "../constants.js";
 import { Order } from "../models/order.models.js";
 import { asyncHandler } from "../utils/AasyncHander.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -8,7 +12,7 @@ import crypto from "crypto";
 const getOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find()
     .populate("items.product")
-    .populate("user", ["name", "email", "phone", "address"]);
+    .populate("customer", ["username", "email", "phone", "address"]);
 
   return res
     .status(200)
@@ -16,18 +20,19 @@ const getOrders = asyncHandler(async (req, res) => {
 });
 
 const getOrderById = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const id = req.params.id;
 
   try {
-    const order = await Order.findById(id)
-      .populate("items.product")
-      .populate("user", ["name", "email", "phone", "address"]);
+    const order = await Order.findById(id);
 
     if (!order) {
       throw new ApiError(404, "Order not found");
     }
+    res
+      .status(200)
+      .json(new ApiResponse(200, order, "order by id fetched successfully"));
   } catch (error) {
-    throw new ApiError(500, "Error in getOrderById", error);
+    throw new ApiError(500, "Error in getOrderById");
   }
 });
 
@@ -35,11 +40,15 @@ const createOrder = asyncHandler(async (req, res) => {
   const data = req.body;
   const userId = req.user._id; //comes from jwt middleware
 
-  const orderId = crypto.randomBytes(10).toString("hex");
+  const orderedId = crypto.randomBytes(10).toString("hex");
 
-  const orders = await Order.create({ ...data, orderId, user: userId });
+  const orders = await Order.create({
+    ...data,
+    orderId: orderedId,
+    customer: userId,
+  });
 
-  res.status(201).json(201, orders, "orders created successfully");
+  res.status(201).json(new ApiResponse(201, orders, "Order is created"));
 });
 
 const deleteOrder = asyncHandler(async (req, res) => {
@@ -113,6 +122,31 @@ const confirmOrderPayment = asyncHandler(async (req, res) => {
   }
 });
 
+const updateOrder = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    const order = await Order.findById(id);
+    console.log(order);
+
+    if (!order) {
+      throw new ApiError(400, "mistake garis order id ma");
+    }
+
+    if (
+      order.customer._id != req.user._id &&
+      !req.user.roles.includes(UserRoleEnum.ADMIN)
+    ) {
+      throw new ApiError(403, "Tw you kam garna paudinas");
+    }
+
+    res
+      .status(200)
+      .json(new ApiResponse(200, order, "order updates successfully"));
+  } catch (error) {}
+});
+
 export {
   getOrders,
   createOrder,
@@ -120,4 +154,5 @@ export {
   getOrderById,
   orderPaymentViaKhalti,
   confirmOrderPayment,
+  updateOrder,
 };

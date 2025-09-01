@@ -9,8 +9,7 @@ const productSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      requried: true,
-      trim: true,
+      required: true,
     },
     imageUrls: {
       type: [String],
@@ -23,7 +22,7 @@ const productSchema = new mongoose.Schema(
     stock: {
       type: Number,
       default: 0,
-      requried: true,
+      required: true,
     },
     brand: {
       type: String,
@@ -36,7 +35,6 @@ const productSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: true,
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
