@@ -33,23 +33,6 @@ const userSchema = new mongoose.Schema(
       enum: AvailableUserRoles,
       default: [UserRoleEnum.USER],
     },
-    address: {
-      province: {
-        type: String,
-        required: true,
-      },
-      city: {
-        type: String,
-        required: true,
-      },
-      country: {
-        type: String,
-        default: "Nepal",
-      },
-      street: {
-        type: String,
-      },
-    },
     phone: {
       type: String,
       requried: true,

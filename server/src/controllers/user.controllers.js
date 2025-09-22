@@ -242,10 +242,13 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 });
 
 const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
   return res
     .status(200)
-    .json(new ApiResponse(200, req.user, "Current user fetched successfully"));
+    .json(new ApiResponse(200, user, "Current user fetched successfully"));
 });
+
 const getAllUsers = asyncHandler(async (req, res) => {
   const users = await User.find();
 

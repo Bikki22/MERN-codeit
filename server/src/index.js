@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/auth", userRouter);
-app.use("/api/v1/product", productRouter);
+app.use("/api/v1/products", productRouter);
 app.use("/api/v1/orders", orderRoutes);
 
 app.listen(PORT, () => {

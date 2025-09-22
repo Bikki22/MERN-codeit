@@ -1,4 +1,10 @@
 import mongoose from "mongoose";
+import {
+  AvailablePaymentProvider,
+  AvailablePaymentStatus,
+  PaymentProviderEnum,
+  PaymentStatusEnum,
+} from "../constants.js";
 
 const paymentSchema = new mongoose.Schema(
   {

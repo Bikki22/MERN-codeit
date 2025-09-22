@@ -54,6 +54,10 @@ const orderSchema = new mongoose.Schema(
       default: OrderStatusEnum.PENDING,
       enum: AvailableOrderStatuses,
     },
+    payment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Payment",
+    },
   },
   { timestamps: true }
 );

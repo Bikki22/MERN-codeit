@@ -1,23 +1,26 @@
+import {
+  ABOUT_ROUTE,
+  CONTACT_ROUTE,
+  HOME_ROUTE,
+  PRODUCT_ROUTE,
+} from "./routes";
+
 const navLinks = [
   {
-    route: "/",
-    label: Home,
-    // isAuth: false,
+    route: HOME_ROUTE,
+    label: "Home",
   },
   {
-    route: "/about",
-    label: About,
-    // isAuth: false,
+    route: ABOUT_ROUTE,
+    label: "About",
   },
   {
-    route: "/products",
-    label: Products,
-    // isAuth: false,
+    route: PRODUCT_ROUTE,
+    label: "Products",
   },
   {
-    route: "/contact",
-    label: Contact,
-    // isAuth: false,
+    route: CONTACT_ROUTE,
+    label: "Contact",
   },
 ];
 
