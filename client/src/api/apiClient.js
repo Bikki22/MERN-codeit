@@ -4,7 +4,7 @@ import axios from "axios";
 class ApiClient {
   constructor() {
     this.client = axios.create({
-      baseURL: `${config.apiUrl}`,
+      baseURL: `${config.apiUrl}/api/v1`,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -15,8 +15,8 @@ class ApiClient {
 
   async customFetch(endpoint, options = {}) {
     try {
-      const method = options.method || "get";
       const url = endpoint;
+      const method = options.method || "get";
 
       const config = {
         url,

@@ -4,6 +4,7 @@ import NavLinks from "./NavLinks";
 import navLinks from "@/constants/navLinks";
 import Link from "next/link";
 import Image from "next/image";
+import AuthMenu from "./AuthMenu";
 
 const Header = () => {
   return (
@@ -33,8 +34,8 @@ const Header = () => {
             </ul>
           </div>
 
-          <div className="items-center justify-between w-full md:flex md:w-auto md:order-2 border-1 border-zinc-500 rounded-md px-2 py-1 shadow-md">
-            <button className="cursor-pointer font-medium">Sign In</button>
+          <div className="items-center justify-between md:flex md:order-2">
+            <AuthMenu />
           </div>
         </div>
       </nav>
