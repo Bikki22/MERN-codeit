@@ -7,6 +7,31 @@ async function login({ email, password }) {
   });
 }
 
+async function register({
+  username,
+  email,
+  password,
+  confirmPassword,
+  phone,
+  provience,
+  city,
+  street,
+}) {
+  return await apiClient.customFetch("/auth/login", {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      email,
+      password,
+      confirmPassword,
+      phone,
+      provience,
+      city,
+      street,
+    }),
+  });
+}
+
 async function profile() {
   const refreshToken = localStorage.getItem("refreshToken");
 
@@ -22,4 +47,4 @@ async function profile() {
   });
 }
 
-export { login, profile };
+export { login, profile, register };

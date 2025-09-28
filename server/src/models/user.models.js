@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
       requried: true,
       trim: true,
     },
-    role: {
+    roles: {
       type: [String],
       enum: AvailableUserRoles,
       default: [UserRoleEnum.USER],
@@ -61,21 +61,21 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.methods.generateAccessToken = function () {
-  return jwt.sign(
-    { _id: this._id, role: this.role },
-    process.env.ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIREY_TIME,
-    }
-  );
-};
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
-    { _id: this._id, role: this.role },
+    { _id: this._id, roles: this.roles },
     process.env.REFRESH_TOKEN_SECRET,
     {
       expiresIn: process.env.REFRESH_TOKEN_EXPIREY_TIME,
+    }
+  );
+};
+userSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    { _id: this._id, roles: this.roles },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIREY_TIME,
     }
   );
 };

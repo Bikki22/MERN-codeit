@@ -22,7 +22,7 @@ class ApiClient {
         url,
         method,
         headers: options.headers,
-        data: options.body,
+        data: options.data,
         params: options.params,
       };
 

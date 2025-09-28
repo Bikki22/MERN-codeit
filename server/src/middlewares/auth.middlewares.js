@@ -16,18 +16,18 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     const user = await User.findById(decoded._id).select(
-      "-password -refreshToken -emailVerification -emailVerificationExpiry"
+      "-password -emailVerification -emailVerificationExpiry"
     );
 
     if (!user) {
-      throw new ApiError(401, "Invalid access token");
+      throw new ApiError(401, "Invalid accesstoken token");
     }
 
     req.user = user;
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {
-      throw new ApiError(401, "Access token expired");
+      throw new ApiError(401, "access token expired");
     }
     throw new ApiError(401, error?.message || "Invalid access token");
   }
@@ -41,11 +41,10 @@ export const verifyPermission = (roles = []) => {
 
     if (
       roles.length === 0 ||
-      roles.some((role) => req.user.role.includes(role))
+      roles.some((role) => req.user.roles.includes(role))
     ) {
       return next();
     }
-
     throw new ApiError(403, "You are not allowed to perform this action");
   };
 };

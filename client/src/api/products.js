@@ -1,20 +1,36 @@
 import { apiClient } from "./apiClient";
 
 async function getProducts() {
-  try {
-    return await apiClient.customFetch("/products");
-  } catch (error) {
-    console.log("failed to fetch products:", error);
-  }
+  return await apiClient.customFetch("/products");
 }
 
 async function getProductById(id) {
-  try {
-    return await apiClient.customFetch(`/products/${id}`);
-  } catch (error) {
-    console.log(`failed to fetch product by id, ${error}`);
-    return null;
-  }
+  return await apiClient.customFetch(`/products/${id}`);
 }
 
-export { getProducts, getProductById };
+async function createProduct(data) {
+  return await apiClient.customFetch("/products", {
+    method: "POST",
+    data,
+  });
+}
+
+async function updateProduct(id, data) {
+  return await apiClient.customFetch(`/products/${id}`, {
+    method: "PUT",
+    data,
+  });
+}
+async function deleteProduct(id) {
+  return await apiClient.customFetch(`/products/${id}`, {
+    method: "DELETE",
+  });
+}
+
+export {
+  getProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+};

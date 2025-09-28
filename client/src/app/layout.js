@@ -3,6 +3,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 import config from "@/config";
 import { ToastContainer } from "react-toastify";
+import ReducerProvider from "@/redux/provider";
+import MainLayout from "@/layouts/MainLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,9 +31,13 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        {children}
-        <ToastContainer />
+        <ReducerProvider>
+          <MainLayout>
+            <Header />
+            {children}
+            <ToastContainer />
+          </MainLayout>
+        </ReducerProvider>
       </body>
     </html>
   );

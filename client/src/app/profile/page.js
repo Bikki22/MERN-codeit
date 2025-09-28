@@ -1,7 +1,7 @@
 "use client";
 
 import { profile } from "@/api/auth";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 const ProfilePage = () => {
   try {

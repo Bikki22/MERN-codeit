@@ -1,9 +1,14 @@
 "use client";
 
 import { login } from "@/api/auth";
-import { HOME_ROUTE } from "@/constants/routes";
+import Spinner from "@/components/Spinner";
+import { HOME_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE } from "@/constants/routes";
+import { loginUser } from "@/redux/auth/authActions";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 const LoginPage = () => {
@@ -15,19 +20,23 @@ const LoginPage = () => {
 
   const router = useRouter();
 
-  async function submitForm(data) {
-    try {
-      const response = await login(data);
-      console.log(response);
+  const { user, error, loading } = useSelector((state) => state.auth);
 
-      localStorage.setItem("refreshToken", response?.data?.refreshToken);
+  const dispatch = useDispatch();
 
-      toast.success("Logged in successfully");
-      router.push(HOME_ROUTE);
-    } catch (error) {
-      toast.error(error.message, { autoClose: 1000 });
-    }
+  function submitForm(data) {
+    dispatch(loginUser(data));
   }
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, {
+        autoClose: 1000,
+      });
+    }
+
+    if (user) router.push(HOME_ROUTE);
+  }, [user, error, router]);
 
   return (
     <div className="container mx-auto px-6">
@@ -94,27 +103,29 @@ const LoginPage = () => {
                       </label>
                     </div>
                   </div>
-                  <a
-                    href="#"
+                  <Link
+                    href={LOGIN_ROUTE}
                     className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Forgot password?
-                  </a>
+                  </Link>
                 </div>
                 <button
                   type="submit"
-                  className="w-full hover:bg-primary-700 bg-slate-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 cursor-pointer"
+                  disabled={loading}
+                  className="w-full hover:bg-primary-700 bg-slate-300 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 cursor-pointer flex justify-center items-center"
                 >
-                  Login
+                  {loading ? <Spinner /> : "Login"}
                 </button>
+
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don’t have an account yet?
-                  <a
-                    href="#"
+                  <Link
+                    href={REGISTER_ROUTE}
                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
-                    Sign in
-                  </a>
+                    Sign Up
+                  </Link>
                 </p>
               </form>
             </div>

@@ -2,7 +2,11 @@ import { v2 as cloudinary } from "cloudinary";
 
 const CLOUDINARY_FOLDER = "MERN";
 
-async function uploadFile(files) {
+async function uploadFile(files = []) {
+  if (!Array.isArray(files)) {
+    throw new Error("Files must be an array");
+  }
+
   const uploadResults = [];
 
   for (const file of files) {

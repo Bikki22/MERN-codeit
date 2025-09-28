@@ -3,22 +3,18 @@ import { body } from "express-validator";
 const createProductValidator = () => {
   return [
     body("name").trim().notEmpty().withMessage("Name is required"),
-    body("description")
-      .trim()
-      .optional()
-      .withMessage("description is required"),
+    body("description").trim().optional(),
     body("price")
-      .trim()
-      .isNumeric()
-      .withMessage("Price must be number")
       .notEmpty()
-      .withMessage("Price is required"),
+      .withMessage("Price is required")
+      .isNumeric()
+      .withMessage("Price must be a number"),
+
     body("stock")
-      .trim()
-      .isNumeric()
-      .withMessage("Stock must be a number")
       .notEmpty()
-      .withMessage("Stock is required"),
+      .withMessage("Stock is required")
+      .isNumeric()
+      .withMessage("Stock must be a number"),
   ];
 };
 

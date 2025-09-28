@@ -5,6 +5,7 @@ import navLinks from "@/constants/navLinks";
 import Link from "next/link";
 import Image from "next/image";
 import AuthMenu from "./AuthMenu";
+import ThemeButton from "./ThemeButton";
 
 const Header = () => {
   return (
@@ -23,7 +24,7 @@ const Header = () => {
               width={100}
             />
             <span className="self-center text-2xl font-semibold whitespace-nowrap ">
-              Sportzyy
+              {process.env.NEXT_PUBLIC_APP_NAME}
             </span>
           </Link>
           <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1">
@@ -35,6 +36,7 @@ const Header = () => {
           </div>
 
           <div className="items-center justify-between md:flex md:order-2">
+            <ThemeButton />
             <AuthMenu />
           </div>
         </div>

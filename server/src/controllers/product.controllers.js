@@ -45,17 +45,20 @@ export const createProduct = asyncHandler(async (req, res) => {
   const { name, price, category, stock, brand, description } = req.body;
   const owner = req.user._id;
 
-  // Upload images to Cloudinary
-  const uploadedFiles = await uploadFile(req.files);
-
-  if (!req.files) {
-    return res.status(400).json({ message: "At least one image is required" });
+  if (!name || !price || !category || !stock || !brand) {
+    throw new ApiError(400, "Fulfill all the fields");
   }
 
+  const uploadedFiles = await uploadFile(req.files);
+
+  // if (!req.files || req.files.length === 0) {
+  //   return res.status(400).json({ message: "At least one image is required" });
+  // }
+
   // Generate product description if not provided
-  const promptMessage = PRODUCT_DESCRIPTION_PROMPT.replace("%s", name)
-    .replace("%s", brand)
-    .replace("%s", category);
+  const promptMessage = PRODUCT_DESCRIPTION_PROMPT.replace("%s", name || "")
+    .replace("%s", brand || "")
+    .replace("%s", category || "");
 
   const productDescription = description ?? (await promptGemini(promptMessage));
 

@@ -1,32 +1,32 @@
 "use client";
 
 import { LOGIN_ROUTE } from "@/constants/routes";
+import { logoutUser } from "@/redux/auth/authSlice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const AuthMenu = () => {
   const [refreshToken, setRefreshToken] = useState(null);
 
   const router = useRouter();
 
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.auth);
+
   function logout() {
-    localStorage.removeItem("refreshToken");
+    dispatch(logoutUser());
 
     router.push(LOGIN_ROUTE);
   }
 
-  useEffect(() => {
-    const token = localStorage.getItem("refreshToken");
-
-    setRefreshToken(token);
-  }, []);
-
-  if (refreshToken)
+  if (user)
     return (
       <button
         onClick={logout}
-        className="text-sm text-blue-500 border-2 rounded-3xl px-4 py-1 hover:bg-blue-600"
+        className="text-md text-blue-500 border-3 rounded-3xl px-4 py-1 hover:bg-blue-600 hover:text-white cursor-pointer"
       >
         Logout
       </button>
@@ -35,7 +35,7 @@ const AuthMenu = () => {
   return (
     <Link
       href={"/login"}
-      className="text-sm text-secondary borde-2 rounded-3xl px-4 py-1 hover:bg-blue-500"
+      className="text-md border-3 px-4 py-1 rounded-lg border-slate-800"
     >
       Login
     </Link>

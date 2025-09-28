@@ -26,7 +26,7 @@ router
   .route("/")
   .post(
     verifyJWT,
-    verifyPermission(allowedRoles),
+    verifyPermission(["ADMIN", "MERCHANT"]),
     upload.array("images", 5),
     createProduct
   );

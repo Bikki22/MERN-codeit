@@ -8,13 +8,13 @@ import { forgotPasswordMailgenContent, sendMail } from "../utils/mail.js";
 const generateAccessTokenAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
-    const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
+    const accessToken = user.generateAccessToken();
 
     user.refreshToken = refreshToken;
 
     await user.save({ validateBeforeSave: false });
-    return { accessToken, refreshToken };
+    return { refreshToken, accessToken };
   } catch (error) {
     throw new ApiError(
       500,
@@ -24,7 +24,7 @@ const generateAccessTokenAndRefreshToken = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password, confirmPassword, address, phone, role } =
+  const { username, email, password, confirmPassword, address, phone, roles } =
     req.body;
 
   if (!confirmPassword) {
@@ -47,10 +47,10 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
     address,
     phone,
-    role,
+    roles,
   });
 
-  const { accessToken, refreshToken } =
+  const { refreshToken, accessToken } =
     await generateAccessTokenAndRefreshToken(user._id);
 
   await user.save({ validateBeforeSave: false });
@@ -64,12 +64,12 @@ const registerUser = asyncHandler(async (req, res) => {
 
   return res
     .status(201)
-    .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, options)
     .json(
       new ApiResponse(
         200,
-        { user: user, accessToken, refreshToken },
+        { ...user.toObject(), refreshToken, accessToken },
         "User created successfully."
       )
     );
@@ -94,7 +94,7 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Invalid password");
   }
 
-  const { accessToken, refreshToken } =
+  const { refreshToken, accessToken } =
     await generateAccessTokenAndRefreshToken(user._id);
 
   const loggedInUser = await User.findById(user._id).select("-password");
@@ -108,12 +108,12 @@ const loginUser = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, options)
     .json(
       new ApiResponse(
         200,
-        { user: loggedInUser, accessToken, refreshToken },
+        { ...loggedInUser.toObject(), refreshToken, accessToken },
         "Logged in successfully"
       )
     );
@@ -136,8 +136,8 @@ const logoutUser = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
+    .clearCookie("accessToken", options)
     .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
 
