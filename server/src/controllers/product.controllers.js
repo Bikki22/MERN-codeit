@@ -8,24 +8,27 @@ import promptGemini from "../utils/gemini.js";
 
 // Get all products with filters, sorting, and pagination
 export const getAllProduct = asyncHandler(async (req, res) => {
-  const { brand, category, limit, offset, min, max, name, sort } = req.query;
-  const sortObj = sort ? JSON.parse(sort) : {};
+  const { brands, category, min, max, limit, name, offset, createdBy } =
+    req.query;
+
+  const sort = JSON.parse(req.query.sort || "{}");
 
   const filters = {};
-  if (brand) filters.brand = { $in: brand.split(",") };
+
+  if (brands) filters.brand = { $in: brands.split(",") };
   if (category) filters.category = category;
-  if (min) filters.price = { $gte: Number(min) };
-  if (max) filters.price = { ...filters.price, $lte: Number(max) };
+  if (min) filters.price = { $gte: min };
+  if (max) filters.price = { ...filters.price, $lte: max };
   if (name) filters.name = { $regex: name, $options: "i" };
 
-  const allProducts = await Product.find(filters)
-    .sort(sortObj)
-    .limit(Number(limit) || 0)
-    .skip(Number(offset) || 0);
+  if (createdBy) filters.createdBy = createdBy;
 
-  res
-    .status(200)
-    .json(new ApiResponse(200, allProducts, "All products fetched"));
+  const products = await Product.find(filters)
+    .sort(sort)
+    .limit(limit)
+    .skip(offset);
+
+  res.status(200).json(new ApiResponse(200, products, "All products fetched"));
 });
 
 // Get product by ID
@@ -45,7 +48,7 @@ export const createProduct = asyncHandler(async (req, res) => {
   const { name, price, category, stock, brand, description } = req.body;
   const owner = req.user._id;
 
-  if (!name || !price || !category || !stock || !brand) {
+  if (!name || !price || !category || !brand) {
     throw new ApiError(400, "Fulfill all the fields");
   }
 
@@ -68,7 +71,8 @@ export const createProduct = asyncHandler(async (req, res) => {
     category,
     stock,
     brand,
-    description: productDescription,
+    // description: productDescription,
+    description,
     owner,
     imageUrls: uploadedFiles.map((item) => item?.url),
   });
@@ -88,7 +92,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
 
   if (
     product.owner.toString() !== req.user._id.toString() &&
-    !req.user.role.includes(UserRoleEnum.ADMIN)
+    !req.user.roles.includes(UserRoleEnum.ADMIN)
   ) {
     throw new ApiError(403, "Access denied");
   }
@@ -128,7 +132,7 @@ export const deleteProduct = asyncHandler(async (req, res) => {
 
   if (
     product.owner.toString() !== req.user._id.toString() &&
-    !req.user.role.includes(UserRoleEnum.ADMIN)
+    !req.user.roles.includes(UserRoleEnum.ADMIN)
   ) {
     throw new ApiError(403, "Access denied");
   }
@@ -138,4 +142,19 @@ export const deleteProduct = asyncHandler(async (req, res) => {
   res
     .status(200)
     .json(new ApiResponse(200, {}, "Product deleted successfully"));
+});
+
+export const getBrands = asyncHandler(async (req, res) => {
+  const brand = await Product.distinct("brand");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, brand, "brand fetched successfully"));
+});
+export const getCategory = asyncHandler(async (req, res) => {
+  const category = await Product.distinct("category");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, category, "category fetched successfully"));
 });

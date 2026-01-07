@@ -15,17 +15,17 @@ const payViaKhalti = async (data) => {
     amount: data.amount,
     website_url: process.env.APP_URL,
     purchase_order_id: data.purchaseOrderId,
-    purchase_order_name: data.purchaseOrderNamer,
+    purchase_order_name: data.purchaseOrderName,
     customer_info: {
       name: data.customer.name,
       email: data.customer.email,
-      phone: data.customer.phone,
+      phone: data.customer.phone || "9800000000",
     },
   };
 
   const response = await axios.post(
     `${process.env.KHALTI_API_URL}/epayment/initiate/`,
-    data,
+    body,
     {
       headers: {
         Authorization: `key ${process.env.KHALTI_API_KEY}`,
@@ -36,4 +36,4 @@ const payViaKhalti = async (data) => {
   return response.data;
 };
 
-export default payViaKhalti;
+export default { payViaKhalti };

@@ -16,7 +16,7 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     const user = await User.findById(decoded._id).select(
-      "-password -emailVerification -emailVerificationExpiry"
+      "-password -emailVerification -emailzVerificationExpiry"
     );
 
     if (!user) {

@@ -16,8 +16,9 @@ const NavLinks = ({ navLink }) => {
         href={navLink.route}
         className={`${
           isActive ? "text-red-500" : ""
-        } block relative py-2 px-3 text-gray-900 rounded-sm border-b border-gray-100 hover:bg-zinc-500 transition-all hover:text-white lg:border-0 `}
+        } relative inline-block text-md font-semibold group cursor-pointer py-2 `}
       >
+        <span className="absolute left-0 bottom-0 w-0 h-[3px] bg-black text-white transition-all duration-300 group-hover:w-full rounded-full"></span>
         {navLink.label}
       </Link>
     </li>

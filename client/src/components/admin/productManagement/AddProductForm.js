@@ -1,13 +1,13 @@
 "use client";
 
-import { createProduct } from "@/api/products";
+import { createProduct, updateProduct } from "@/api/products";
 import Spinner from "@/components/Spinner";
 import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-const AddProductForm = () => {
+const AddProductForm = ({ product, isEditing = false }) => {
   const [loading, setLoading] = useState(false);
   const [productImages, setProductImages] = useState([]);
   const [localImageUrls, setLocalImageUrls] = useState([]);
@@ -17,7 +17,9 @@ const AddProductForm = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
+  } = useForm({
+    values: product,
+  });
 
   function prepareData(data) {
     const formdata = new FormData();
@@ -44,6 +46,16 @@ const AddProductForm = () => {
     const input = prepareData(data);
 
     try {
+      if (isEditing) {
+        await updateProduct(product._id, input);
+
+        toast.success("Product updated successfully", {
+          autoClose: 1500,
+        });
+
+        return;
+      }
+
       await createProduct(input);
       reset();
 
@@ -245,7 +257,7 @@ const AddProductForm = () => {
         className="inline-flex items-center px-6 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center bg-primary text-white hover:bg-primary/90 rounded-lg focus:ring-4 hover:bg-primary-800 cursor-pointer"
         onClick={() => setLoading(true)}
       >
-        {loading ? <Spinner /> : "Add Product"}
+        {loading ? <Spinner /> : isEditing ? "Edit Product" : "Add Product"}
       </button>
     </form>
   );

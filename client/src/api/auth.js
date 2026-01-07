@@ -3,7 +3,7 @@ import { apiClient } from "./apiClient";
 async function login({ email, password }) {
   return await apiClient.customFetch("/auth/login", {
     method: "POST",
-    body: JSON.stringify({ email, password }),
+    data: JSON.stringify({ email, password }),
   });
 }
 
@@ -19,7 +19,7 @@ async function register({
 }) {
   return await apiClient.customFetch("/auth/login", {
     method: "POST",
-    body: JSON.stringify({
+    data: JSON.stringify({
       username,
       email,
       password,

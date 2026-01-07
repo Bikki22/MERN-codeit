@@ -5,10 +5,14 @@ import { logoutUser } from "@/redux/auth/authSlice";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { FaUser } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import UserPopup from "./UserPopup";
 
 const AuthMenu = () => {
   const [refreshToken, setRefreshToken] = useState(null);
+
+  const [showPopup, setShowPopup] = useState(false);
 
   const router = useRouter();
 
@@ -19,17 +23,19 @@ const AuthMenu = () => {
   function logout() {
     dispatch(logoutUser());
 
-    router.push(LOGIN_ROUTE);
+    router.push("/login");
   }
 
   if (user)
     return (
-      <button
-        onClick={logout}
-        className="text-md text-blue-500 border-3 rounded-3xl px-4 py-1 hover:bg-blue-600 hover:text-white cursor-pointer"
-      >
-        Logout
-      </button>
+      <>
+        <button className="ml-2 relative" onClick={() => setShowPopup(true)}>
+          <FaUser className="w-8 h-8 p-1 rounded-full bg-gray-300 cursor-pointer" />
+        </button>
+        {showPopup && (
+          <UserPopup setShowPopup={setShowPopup} user={user} logout={logout} />
+        )}
+      </>
     );
 
   return (

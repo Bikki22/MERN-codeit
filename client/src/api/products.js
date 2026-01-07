@@ -1,7 +1,13 @@
+import formatParams from "@/helpers/formatParams";
 import { apiClient } from "./apiClient";
 
-async function getProducts() {
-  return await apiClient.customFetch("/products");
+async function getProducts(searchParams) {
+  const query = formatParams(searchParams);
+
+  return await apiClient.customFetch(`/products`, {
+    method: "GET",
+    params: query,
+  });
 }
 
 async function getProductById(id) {
@@ -27,10 +33,20 @@ async function deleteProduct(id) {
   });
 }
 
+async function getBrands() {
+  return await apiClient.customFetch(`/products/brands`);
+}
+
+async function getCategories() {
+  return await apiClient.customFetch(`/products/categories`);
+}
+
 export {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
+  getBrands,
+  getCategories,
 };

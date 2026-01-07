@@ -4,9 +4,10 @@ import {
   createOrder,
   deleteOrder,
   getOrderById,
+  getOrderByUser,
   getOrders,
   orderPaymentViaKhalti,
-  updateOrder,
+  updateOrderStatus,
 } from "../controllers/order.controllers.js";
 import {
   verifyJWT,
@@ -19,12 +20,15 @@ const router = express.Router();
 router
   .route("/")
   .get(verifyJWT, verifyPermission([UserRoleEnum.ADMIN]), getOrders);
+
+router.route("/user").get(verifyJWT, getOrderByUser);
+
 router
   .route("/:id")
   .get(verifyJWT, verifyPermission([UserRoleEnum.ADMIN]), getOrderById);
 
 router.route("/").post(verifyJWT, createOrder);
-router.route("/:id").put(verifyJWT, updateOrder);
+router.route("/:id").put(verifyJWT, updateOrderStatus);
 router
   .route("/:id")
   .delete(verifyJWT, verifyPermission([UserRoleEnum.ADMIN]), deleteOrder);

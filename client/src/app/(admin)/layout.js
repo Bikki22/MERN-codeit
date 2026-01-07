@@ -1,5 +1,6 @@
 "use client";
 
+import Sidebar from "@/components/admin/Sidebar";
 import Spinner from "@/components/Spinner";
 import { HOME_ROUTE, LOGIN_ROUTE } from "@/constants/routes";
 import { allowedRoles } from "@/helpers/roles";
@@ -30,7 +31,14 @@ const AdminLayout = ({ children }) => {
     );
   }
 
-  return <div>{children}</div>;
+  return (
+    <div className="relative lg:pl-64">
+      <Sidebar />
+      <section className="bg-gray-50 dark:bg-gray-800 min-h-screen py-4 sm:py-8">
+        {children}
+      </section>
+    </div>
+  );
 };
 
 export default AdminLayout;

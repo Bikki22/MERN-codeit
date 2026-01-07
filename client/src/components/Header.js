@@ -6,11 +6,13 @@ import Link from "next/link";
 import Image from "next/image";
 import AuthMenu from "./AuthMenu";
 import ThemeButton from "./ThemeButton";
+import { MdOutlineAddShoppingCart } from "react-icons/md";
+import CartButton from "./CartButton";
 
 const Header = () => {
   return (
-    <header>
-      <nav className="border-gray-200 shadow ">
+    <header className="sticky top-0 z-50 bg-white">
+      <nav className="border-gray-200 shadow">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-3">
           <Link
             href="/"
@@ -36,6 +38,7 @@ const Header = () => {
           </div>
 
           <div className="items-center justify-between md:flex md:order-2">
+            <CartButton />
             <ThemeButton />
             <AuthMenu />
           </div>

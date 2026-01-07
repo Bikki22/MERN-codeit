@@ -22,18 +22,12 @@ const paymentSchema = new mongoose.Schema(
       enum: AvailablePaymentProvider,
       default: PaymentProviderEnum.KHALTI,
     },
-    paymentId: {
-      type: String,
-    },
-    isPaymentDone: {
-      type: Boolean,
-      default: false,
-    },
     paymentStatus: {
       type: String,
       enum: AvailablePaymentStatus,
       default: PaymentStatusEnum.PENDING,
     },
+    transactionId: String,
   },
   {
     timestamps: true,

@@ -1,4 +1,5 @@
 import { getProductById } from "@/api/products";
+import BackButton from "@/components/BackButton";
 
 const ProductDetailPage = async ({ params }) => {
   const productId = (await params).productId;
@@ -8,6 +9,7 @@ const ProductDetailPage = async ({ params }) => {
 
   return (
     <div>
+      <BackButton />
       <h1 className="text-4xl">ProductId: {productId}</h1>
       <ul>
         <li>Name: {product?.name}</li>

@@ -3,6 +3,8 @@ import {
   createProduct,
   deleteProduct,
   getAllProduct,
+  getBrands,
+  getCategory,
   getProductById,
   updateProduct,
 } from "../controllers/product.controllers.js";
@@ -22,6 +24,8 @@ const upload = multer({
 const allowedRoles = [UserRoleEnum.ADMIN, UserRoleEnum.MERCHANT];
 
 router.route("/").get(getAllProduct);
+router.route("/brands").get(getBrands);
+router.route("/categories").get(getCategory);
 router
   .route("/")
   .post(

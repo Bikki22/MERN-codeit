@@ -6,6 +6,7 @@ import cors from "cors";
 
 // routes
 import productRouter from "./routes/product.routes.js";
+import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 import connectCloudinary from "./config/cloudinary.js";
@@ -34,7 +35,8 @@ app.get("/", (req, res) => {
   res.send("Hello world!!");
 });
 
-app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users", userRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/orders", orderRoutes);
 
