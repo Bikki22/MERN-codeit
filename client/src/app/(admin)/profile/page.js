@@ -1,15 +1,17 @@
 "use client";
 
 import Button from "@/components/Button";
+import ProfileImage from "@/components/ProfileImage";
 import { updateUserProfile } from "@/redux/auth/authActions";
 import { resetSuccess } from "@/redux/auth/authSlice";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 const ProfilePage = () => {
-  const { error, loading, user, success } = useSelector((state) => state.auth);
+  const [loading, setLoading] = useState(false);
+  const { error, user, success } = useSelector((state) => state.auth);
 
   const {
     register,
@@ -26,6 +28,7 @@ const ProfilePage = () => {
   const dispatch = useDispatch();
 
   function submitForm(data) {
+    setLoading(true);
     dispatch(
       updateUserProfile({
         id: user._id,
@@ -61,7 +64,7 @@ const ProfilePage = () => {
           Your Profile
         </h1>
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8 dark:bg-slate-700 bg-white rounded-2xl w-full border border-gray-200 dark:border-gray-600 shadow-lg">
-          {/* <ProfileImage user={user} /> */}
+          <ProfileImage user={user} />
           <form
             onSubmit={handleSubmit(submitForm)}
             className="space-y-4 md:space-y-6"

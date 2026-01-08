@@ -96,7 +96,7 @@ const About = () => {
             <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">
               Meet Our Team
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Our talented team of professionals brings diverse expertise and
               passion to every project we undertake.
             </p>

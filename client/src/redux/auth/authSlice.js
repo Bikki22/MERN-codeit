@@ -23,6 +23,10 @@ const authSlice = createSlice({
     resetSuccess: (state) => {
       state.success = false;
     },
+
+    updateUser: (state, action) => {
+      state.user = { ...state.user, profileImageUrl: action.payload };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -71,6 +75,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { logoutUser, resetSuccess } = authSlice.actions;
+export const { logoutUser, resetSuccess, updateUser } = authSlice.actions;
 
 export default authSlice.reducer;

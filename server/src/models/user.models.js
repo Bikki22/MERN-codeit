@@ -45,6 +45,9 @@ const userSchema = new mongoose.Schema(
       // },
       unique: true,
     },
+    profileImageUrl: {
+      type: String,
+    },
     forgotPasswordToken: {
       type: String,
     },

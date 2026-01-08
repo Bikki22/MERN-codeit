@@ -10,7 +10,7 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem("accessToken", response.data?.accessToken);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response?.data);
     }
   }
 );
@@ -23,7 +23,7 @@ export const registerUser = createAsyncThunk(
       localStorage.setItem("refreshToken", response?.data?.refreshToken);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response?.data);
     }
   }
 );

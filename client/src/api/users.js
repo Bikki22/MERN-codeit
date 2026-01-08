@@ -1,3 +1,4 @@
+import axios from "axios";
 import { apiClient } from "./apiClient";
 
 async function getAllUsers() {
@@ -32,4 +33,19 @@ async function deleteUser(id) {
   });
 }
 
-export { getAllUsers, getUserById, createUser, updateUser, deleteUser };
+function updateProfileImage(id, file) {
+  return axios.patch(`http://localhost:5000/api/v1/users/profile-image/${id}`, {
+    profileImage: file,
+  });
+}
+
+// 25:49
+
+export {
+  getAllUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+  updateProfileImage,
+};

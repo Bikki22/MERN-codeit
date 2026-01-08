@@ -14,6 +14,7 @@ const AdminLayout = ({ children }) => {
   const router = useRouter();
 
   const allowRoles = allowedRoles(user.roles);
+  console.log(user);
 
   useEffect(() => {
     if (!user) {

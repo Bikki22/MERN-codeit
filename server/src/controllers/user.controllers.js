@@ -71,22 +71,25 @@ export const deleteUser = asyncHandler(async (req, res) => {
 });
 
 export const updateUserProfile = asyncHandler(async (req, res) => {
-  const id = req.user._id;
-  const file = req.file;
+  const { id } = req.params;
 
-  const uploadedFile = await uploadFile([file]);
+  if (!req.file) {
+    return res
+      .status(400)
+      .json(new ApiResponse(400, null, "Profile image is required"));
+  }
 
-  const result = await User.findByIdAndUpdate(
+  const uploadedFiles = await uploadFile([req.file]);
+
+  const user = await User.findByIdAndUpdate(
     id,
     {
-      profileImageUrl: uploadedFile[0].url,
+      profileImageUrl: uploadedFiles[0].secure_url,
     },
-    {
-      new: true,
-    }
+    { new: true }
   );
 
   res
     .status(200)
-    .json(new ApiResponse(200, result, "Profile Updated successfully"));
+    .json(new ApiResponse(200, user, "Profile updated successfully"));
 });

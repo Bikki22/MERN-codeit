@@ -6,7 +6,7 @@ import { HOME_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE } from "@/constants/routes";
 import { loginUser } from "@/redux/auth/authActions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -18,13 +18,16 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm();
 
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
 
-  const { user, error, loading } = useSelector((state) => state.auth);
+  const { user, error } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
   function submitForm(data) {
+    setLoading(true);
     dispatch(loginUser(data));
   }
 
