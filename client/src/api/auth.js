@@ -47,4 +47,18 @@ async function profile() {
   });
 }
 
-export { login, profile, register };
+async function forgotPassword({ email }) {
+  return await apiClient.customFetch("/auth/forgot-password", {
+    method: "POST",
+    data: { email },
+  });
+}
+
+async function resetPassword({ token, newPassword }) {
+  return await apiClient.customFetch(`/auth/reset-password?token=${token}`, {
+    method: "POST",
+    data: { newPassword },
+  });
+}
+
+export { login, profile, register, forgotPassword, resetPassword };

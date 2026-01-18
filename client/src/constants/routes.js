@@ -12,3 +12,4 @@ export const PROFILE_ROUTES = "/profile";
 export const ORDER_MANAGEMENT_ROUTE = "/order-management";
 export const USER_MANAGEMENT_ROUTE = "/user-management";
 export const FORGOT_PASSWORD_ROUTE = "/forgot-password";
+export const RESET_PASSWORD_ROUTE = "/reset-password";

@@ -7,12 +7,14 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  resetForgottenPassword,
 } from "../controllers/auth.controllers.js";
 import {
   userChangeCurrentPasswordValidator,
   userForgotPasswordValidator,
   userLoginValidator,
   userRegisterValidation,
+  userResetPasswordValidator,
 } from "../validators/user.validation.js";
 import {
   verifyJWT,
@@ -27,6 +29,12 @@ router.route("/logout").post(verifyJWT, logoutUser);
 router
   .route("/forgot-password")
   .post(userForgotPasswordValidator(), forgotPasswordRequest);
+router.post(
+  "/reset-password",
+  userResetPasswordValidator(),
+  resetForgottenPassword
+);
+
 router
   .route("/change-password")
   .put(userChangeCurrentPasswordValidator(), changeCurrentPassword);

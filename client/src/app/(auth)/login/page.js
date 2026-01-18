@@ -2,7 +2,12 @@
 
 import { login } from "@/api/auth";
 import Spinner from "@/components/Spinner";
-import { HOME_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE } from "@/constants/routes";
+import {
+  FORGOT_PASSWORD_ROUTE,
+  HOME_ROUTE,
+  LOGIN_ROUTE,
+  REGISTER_ROUTE,
+} from "@/constants/routes";
 import { loginUser } from "@/redux/auth/authActions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -107,7 +112,7 @@ const LoginPage = () => {
                     </div>
                   </div>
                   <Link
-                    href={LOGIN_ROUTE}
+                    href={FORGOT_PASSWORD_ROUTE}
                     className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Forgot password?

@@ -67,10 +67,17 @@ const userForgotPasswordValidator = () => {
       .withMessage("Email must be in lower case"),
   ];
 };
+const userResetPasswordValidator = () => {
+  return [
+    body("token").notEmpty().withMessage("token is required"),
+    body("password").notEmpty().withMessage("password is required"),
+  ];
+};
 
 export {
   userRegisterValidation,
   userLoginValidator,
   userForgotPasswordValidator,
   userChangeCurrentPasswordValidator,
+  userResetPasswordValidator,
 };

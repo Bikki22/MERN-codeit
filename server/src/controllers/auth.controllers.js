@@ -3,7 +3,8 @@ import bcrypt from "bcryptjs";
 import { asyncHandler } from "../utils/AasyncHander.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { forgotPasswordMailgenContent, sendMail } from "../utils/mail.js";
+import { forgotPasswordMailGenContent, sendMail } from "../utils/mail.js";
+import crypto from "crypto";
 
 const generateAccessTokenAndRefreshToken = async (userId) => {
   try {
@@ -144,10 +145,18 @@ const logoutUser = asyncHandler(async (req, res) => {
 const forgotPasswordRequest = asyncHandler(async (req, res) => {
   const { email } = req.body;
 
-  const user = await User.findOne({ email: email.toLowerCase() });
+  const user = await User.findOne({ email: email });
 
   if (!user) {
-    throw new ApiError(404, "email doesnot exists");
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          {},
+          "If this email exists, a reset link has been sent"
+        )
+      );
   }
 
   const { unhashedToken, hashedToken, tokenExpiry } =
@@ -162,11 +171,12 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
     await sendMail({
       email: user?.email,
       subject: "Forgot password request",
-      mailgenContent: forgotPasswordMailgenContent(
+      mailGenContent: forgotPasswordMailGenContent(
         user.username,
-        `${process.env.FORGOT_PASSWORD_REDIRECT_URL}/${unhashedToken}`
+        `${process.env.FORGOT_PASSWORD_REDIRECT_URL}?token=${unhashedToken}`
       ),
     });
+    console.log("user email", user.email);
   } catch (err) {
     user.forgotPasswordToken = undefined;
     user.forgotPasswordExpiry = undefined;
@@ -186,13 +196,10 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
 });
 
 const resetForgottenPassword = asyncHandler(async (req, res) => {
-  const { resetToken } = req.params;
+  const { token } = req.query;
   const { newPassword } = req.body;
 
-  const hashedToken = crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
   const user = await User.findOne({
     forgotPasswordToken: hashedToken,

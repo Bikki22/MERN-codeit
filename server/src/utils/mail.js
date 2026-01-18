@@ -1,34 +1,34 @@
 import Mailgen from "mailgen";
 import nodemailer from "nodemailer";
 
-const sendMail = async (option) => {
+const sendMail = async (options) => {
   const mailGenerator = new Mailgen({
     theme: "default",
     product: {
-      name: "Mailgen",
+      name: "Ecommerce webapp",
       link: "https://mailgen.js/",
     },
   });
 
   // Generate an HTML email with the provided contents
-  var emailHtml = mailGenerator.generate(option);
+  const emailHtml = mailGenerator.generate(options.mailGenContent);
 
   // Generate the plaintext version of the e-mail (for clients that do not support HTML)
-  var emailText = mailGenerator.generatePlaintext(option);
+  const emailText = mailGenerator.generatePlaintext(options.mailGenContent);
 
   const transporter = nodemailer.createTransport({
     host: process.env.MAILTRAP_SMTP_HOST,
     port: process.env.MAILTRAP_SMTP_PORT,
     auth: {
       user: process.env.MAILTRAP_SMTP_USER,
-      password: process.env.MAILTRAP_SMTP_PASS,
+      pass: process.env.MAILTRAP_SMTP_PASSWORD,
     },
   });
 
   const mail = {
-    from: "mail.example.@example.com",
-    to: option.email,
-    subject: option.subject,
+    from: "mailtrap@demomailtrap.com",
+    to: options.email,
+    subject: options.subject,
     text: emailText,
     html: emailHtml,
   };
@@ -40,13 +40,14 @@ const sendMail = async (option) => {
   }
 };
 
-const emailVerificationMailgenContent = (username, verificationUrl) => {
+const emailVerificationMailGenContent = (username, verificationUrl) => {
   return {
     body: {
       name: username,
       intro: "Welcome to our app! we are very excited to have you on our app",
       action: {
-        instructions: "To verify your email please click on the button",
+        instructions:
+          "To verify your email please click on the following button:",
         button: {
           color: "#22BC66", // Optional action button color
           text: "Verify your email",
@@ -59,7 +60,7 @@ const emailVerificationMailgenContent = (username, verificationUrl) => {
   };
 };
 
-const forgotPasswordMailgenContent = (username, passwordResetUrl) => {
+const forgotPasswordMailGenContent = (username, passwordResetUrl) => {
   return {
     body: {
       name: username,
@@ -81,6 +82,6 @@ const forgotPasswordMailgenContent = (username, passwordResetUrl) => {
 
 export {
   sendMail,
-  emailVerificationMailgenContent,
-  forgotPasswordMailgenContent,
+  emailVerificationMailGenContent,
+  forgotPasswordMailGenContent,
 };
