@@ -40,6 +40,9 @@ async function getBrands() {
 async function getCategories() {
   return await apiClient.customFetch(`/products/categories`);
 }
+async function getProductCount() {
+  return await apiClient.customFetch(`/products/count`);
+}
 
 export {
   getProducts,
@@ -49,4 +52,5 @@ export {
   deleteProduct,
   getBrands,
   getCategories,
+  getProductCount,
 };

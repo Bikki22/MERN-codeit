@@ -48,22 +48,22 @@ export const createProduct = asyncHandler(async (req, res) => {
   const { name, price, category, stock, brand, description } = req.body;
   const owner = req.user._id;
 
-  if (!name || !price || !category || !brand) {
+  if (!name || !price || !category || !brand || !stock) {
     throw new ApiError(400, "Fulfill all the fields");
   }
 
   const uploadedFiles = await uploadFile(req.files);
 
-  // if (!req.files || req.files.length === 0) {
-  //   return res.status(400).json({ message: "At least one image is required" });
-  // }
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ message: "At least one image is required" });
+  }
 
   // Generate product description if not provided
-  const promptMessage = PRODUCT_DESCRIPTION_PROMPT.replace("%s", name || "")
-    .replace("%s", brand || "")
-    .replace("%s", category || "");
+  // const promptMessage = PRODUCT_DESCRIPTION_PROMPT.replace("%s", name || "")
+  //   .replace("%s", brand || "")
+  //   .replace("%s", category || "");
 
-  const productDescription = description ?? (await promptGemini(promptMessage));
+  // const productDescription = await promptGemini(promptMessage);
 
   const product = await Product.create({
     name,
@@ -71,7 +71,7 @@ export const createProduct = asyncHandler(async (req, res) => {
     category,
     stock,
     brand,
-    // description: productDescription,
+    // description: description ? description : productDescription,
     description,
     owner,
     imageUrls: uploadedFiles.map((item) => item?.url),
@@ -115,7 +115,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
       description,
       imageUrls,
     },
-    { new: true }
+    { new: true },
   );
 
   res
@@ -151,6 +151,14 @@ export const getBrands = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, brand, "brand fetched successfully"));
 });
+export const getCount = asyncHandler(async (req, res) => {
+  const count = await Product.countDocuments();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, count, "count fetched successfully"));
+});
+
 export const getCategory = asyncHandler(async (req, res) => {
   const category = await Product.distinct("category");
 

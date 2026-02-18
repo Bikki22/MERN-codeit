@@ -5,6 +5,7 @@ import {
   getAllProduct,
   getBrands,
   getCategory,
+  getCount,
   getProductById,
   updateProduct,
 } from "../controllers/product.controllers.js";
@@ -25,6 +26,7 @@ const allowedRoles = [UserRoleEnum.ADMIN, UserRoleEnum.MERCHANT];
 
 router.route("/").get(getAllProduct);
 router.route("/brands").get(getBrands);
+router.route("/count").get(getCount);
 router.route("/categories").get(getCategory);
 router
   .route("/")
@@ -32,7 +34,7 @@ router
     verifyJWT,
     verifyPermission(["ADMIN", "MERCHANT"]),
     upload.array("images", 5),
-    createProduct
+    createProduct,
   );
 
 router.route("/:id").get(getProductById);
@@ -42,7 +44,7 @@ router
     verifyJWT,
     verifyPermission(allowedRoles),
     upload.array("images", 5),
-    updateProduct
+    updateProduct,
   );
 router
   .route("/:id")
