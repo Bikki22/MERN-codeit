@@ -11,14 +11,15 @@ const NavLinks = ({ navLink }) => {
     (navLink.route !== "/" && pathname.startsWith(navLink.route));
 
   return (
-    <li className="w-full px-5 py-2 list-none font-medium">
+    <li className="list-none">
       <Link
         href={navLink.route}
-        className={`${
-          isActive ? "text-red-500" : ""
-        } relative inline-block text-md font-semibold group cursor-pointer py-2 `}
+        className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-colors inline-block ${
+          isActive
+            ? "text-primary bg-primary/10 dark:text-white dark:bg-primary/20"
+            : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800"
+        }`}
       >
-        <span className="absolute left-0 bottom-0 w-0 h-[3px] bg-black text-white transition-all duration-300 group-hover:w-full rounded-full"></span>
         {navLink.label}
       </Link>
     </li>

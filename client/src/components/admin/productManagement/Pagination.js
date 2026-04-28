@@ -1,7 +1,6 @@
 "use client";
 
 import { getProductCount } from "@/api/products";
-import button from "next/link";
 import { useEffect, useState } from "react";
 
 const Pagination = ({ page, setPage }) => {
@@ -11,9 +10,9 @@ const Pagination = ({ page, setPage }) => {
     const response = await getProductCount();
 
     const totalItems = response.data;
-    console.log(totalItems);
+    console.log("total data:", totalItems);
 
-    const totalPage = Math.ceil(totalItems / 5);
+    const totalPage = Math.ceil(totalItems / 3);
     const pageNumbers = [];
 
     for (let i = 1; i <= totalPage; i++) {
@@ -21,23 +20,25 @@ const Pagination = ({ page, setPage }) => {
     }
 
     setPages(pageNumbers);
-    console.log(pages)
-
   }
 
   useEffect(() => {
     getCount();
   }, []);
 
+  console.log(pages);
 
   return (
     <nav
-      className="flex flex-col md:flex-row justify-end items-start md:items-center space-y-3 md:space-y-0 p-4"
+      className="flex flex-col md:flex-row justify-end items-start md:items-center space-y-3 md:space-y-0 p-5 border-t border-slate-100 dark:border-slate-800"
       aria-label="Table navigation"
     >
-      <ul className="inline-flex items-center -space-x-px">
+      <ul className="inline-flex items-center gap-1">
         <li>
-          <button className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          <button
+            className="flex items-center justify-center w-9 h-9 text-slate-500 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white cursor-pointer transition"
+            onClick={() => setPage(page == pages ? 1 : pages)}
+          >
             <span className="sr-only">Previous</span>
             <svg
               className="w-5 h-5"
@@ -57,21 +58,23 @@ const Pagination = ({ page, setPage }) => {
 
         {pages.map((pageNumber) => (
           <li key={pageNumber}>
-            <button className="flex items-center justify-center text-sm  leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-              <span
-                className={
-                  pageNumber === page
-                    ? "text-white bg-secondary py-2 px-3 "
-                    : "py-2 px-3"
-                }
-              >
-                {pageNumber}
-              </span>
+            <button
+              onClick={() => setPage(Number(pageNumber))}
+              className={`flex items-center justify-center w-9 h-9 text-sm font-medium rounded-lg border transition cursor-pointer ${
+                Number(pageNumber) === page
+                  ? "bg-primary text-white border-primary shadow-sm shadow-primary/20"
+                  : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"
+              }`}
+            >
+              {pageNumber}
             </button>
           </li>
         ))}
         <li>
-          <button className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          <button
+            className="flex items-center justify-center w-9 h-9 text-slate-500 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white cursor-pointer transition"
+            onClick={() => setPage(page > pages.length ? page : page + 1)}
+          >
             <span className="sr-only">Next</span>
             <svg
               className="w-5 h-5"

@@ -5,9 +5,14 @@ import React from "react";
 
 const OrderManagement = () => {
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 py-4 sm:py-8">
-      <div className="px-4 mx-auto max-w-screen-2xl">
-        <h2>Order Management</h2>
+    <section>
+      <div className="mx-auto max-w-screen-2xl mb-6">
+        <p className="text-xs font-semibold tracking-widest uppercase text-primary mb-2">
+          Sales
+        </p>
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+          Order management
+        </h2>
       </div>
       <OrdersTable />
     </section>

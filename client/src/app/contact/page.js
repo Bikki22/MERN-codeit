@@ -14,17 +14,19 @@ export const metadata = {
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-16 dark:bg-gray-800">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">
-            Get in Touch
+    <section id="contact" className="py-20 bg-background">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-14">
+          <p className="text-xs font-semibold tracking-widest uppercase text-primary mb-2">
+            Contact
+          </p>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white mb-3">
+            Get in touch
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Have a question or want to work with us? Fill out the form below and
+          <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+            Have a question or want to work with us? Fill out the form and
             we&apos;ll get back to you as soon as possible.
           </p>
-          <div className="h-1 w-20 bg-secondary mx-auto mt-4" />
         </div>
         <div className="md:flex">
           <div className="md:w-2/5 mb-10 md:mb-0">
@@ -105,7 +107,7 @@ const Contact = () => {
             </div>
           </div>
           <div className="md:w-3/5 md:pl-16">
-            <form className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-8 dark:text-white">
+            <form className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 dark:text-white">
               <div className="mb-6">
                 <label
                   htmlFor="name"
@@ -116,7 +118,7 @@ const Contact = () => {
                 <input
                   type="text"
                   id="name"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
                   placeholder="John Doe"
                 />
               </div>
@@ -130,7 +132,7 @@ const Contact = () => {
                 <input
                   type="email"
                   id="email"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
                   placeholder="john@example.com"
                 />
               </div>
@@ -144,7 +146,7 @@ const Contact = () => {
                 <input
                   type="text"
                   id="subject"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
                   placeholder="How can we help?"
                 />
               </div>
@@ -158,16 +160,16 @@ const Contact = () => {
                 <textarea
                   id="message"
                   rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
                   placeholder="Type your message here..."
                   defaultValue={""}
                 />
               </div>
               <button
                 type="submit"
-                className="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-opacity-90 transition focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+                className="w-full bg-primary text-white py-3 px-4 rounded-xl font-semibold hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/30 transition cursor-pointer"
               >
-                Send Message
+                Send message
               </button>
             </form>
           </div>

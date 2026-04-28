@@ -51,19 +51,21 @@ const UsersTable = () => {
 
   return (
     <div>
-      <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased">
-        <div className="mx-auto max-w-screen-2xl px-4 lg:px-12">
-          <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-              <div className="flex-1 flex items-center space-x-2">
-                <h5>
-                  <span className="text-gray-500">All Users: </span>
-                  <span className="dark:text-white">{users?.length}</span>
-                </h5>
+      <section className="antialiased">
+        <div className="mx-auto max-w-screen-2xl">
+          <div className="bg-white dark:bg-slate-900 relative shadow-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 p-5">
+              <div className="flex-1 flex items-center gap-3 text-sm">
+                <span className="text-slate-500 dark:text-slate-400">
+                  All users
+                </span>
+                <span className="font-semibold text-slate-900 dark:text-white">
+                  {users?.length}
+                </span>
               </div>
-              <div className="flex-shrink-0 flex flex-col items-start md:flex-row md:items-center lg:justify-end space-y-3 md:space-y-0 md:space-x-3"></div>
+              <div className="flex-shrink-0 flex items-center gap-2"></div>
             </div>
-            <div className="flex flex-col md:flex-row items-stretch md:items-center md:space-x-3 space-y-3 md:space-y-0 justify-between mx-4 py-4 border-t dark:border-gray-700">
+            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 justify-between px-5 py-4 border-t border-slate-100 dark:border-slate-800">
               <div className="w-full md:w-1/2">
                 <form className="flex items-center">
                   <label htmlFor="simple-search" className="sr-only">
@@ -88,31 +90,18 @@ const UsersTable = () => {
                     <input
                       type="text"
                       id="simple-search"
-                      placeholder="Search for orders"
-                      required
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      placeholder="Search users..."
+                      className="block w-full pl-10 pr-4 py-2.5 text-sm text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
                     />
                   </div>
                 </form>
               </div>
               <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                <Link
-                  href={`${PRODUCT_MANAGEMENT_ROUTE}/${ADD_PRODUCT}`}
-                  type="button"
-                  id="createProductButton"
-                  data-modal-toggle="createProductModal"
-                  className="flex items-center justify-center bg-primary-700 hover:bg-primary-800  border-1 border-gray-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-gray-700 dark:text-white hover:bg-gray-100"
-                >
-                  <FaPlus className="h-3.5 w-3.5 mr-1.5 -ml-1 font-semibold" />
-                  Add Orders
-                </Link>
                 <button
-                  id="filterDropdownButton"
-                  data-dropdown-toggle="filterDropdown"
-                  className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 gap-2"
+                  className="inline-flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition"
                   type="button"
                 >
-                  <FaEdit />
+                  <FaEdit className="w-3.5 h-3.5" />
                   Filter options
                   <svg
                     className="-mr-1 ml-1.5 w-5 h-5"
@@ -131,8 +120,8 @@ const UsersTable = () => {
               </div>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 cursor-pointer">
+              <table className="w-full text-sm text-left text-slate-700 dark:text-slate-300">
+                <thead className="text-[11px] text-slate-500 dark:text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800/50">
                   <tr>
                     {columns.map((column, index) => (
                       <th scope="col" className="p-4" key={index}>
@@ -150,7 +139,7 @@ const UsersTable = () => {
                   {users?.map((user, index) => (
                     <tr
                       key={index}
-                      className="busier-b hover:bg-gray-50 dark:hover:bg-gray-700 text-center"
+                      className="border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition text-center"
                     >
                       <td className="px-4 py-2">
                         <div className="flex items-center">{index + 1}</div>
@@ -162,7 +151,7 @@ const UsersTable = () => {
                         {user.roles?.map((role) => (
                           <span
                             key={role}
-                            className="px-1 mx-0.5 text-sm bg-primary/10 text-primary rounded border-primary/50"
+                            className="inline-block px-2 py-0.5 mx-0.5 text-[11px] font-semibold bg-primary/10 text-primary rounded-full"
                           >
                             {role}
                           </span>

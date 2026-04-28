@@ -57,8 +57,11 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <div className="hidden lg:block w-64 bg-white absolute top-0 left-0 h-full z-20 border-r border-gray-300 dark:bg-gray-900 dark:border-gray-700">
-      <div className="p-4 flex flex-col gap-1">
+    <aside className="hidden lg:block w-64 bg-white dark:bg-slate-900 fixed top-0 left-0 h-full z-20 border-r border-slate-200 dark:border-slate-800 pt-16">
+      <div className="px-3 py-4 flex flex-col gap-1">
+        <p className="text-[11px] font-semibold tracking-widest text-slate-400 uppercase px-3 mb-2">
+          Admin
+        </p>
         {adminMenu.map((menu) => {
           const isActive = pathname.startsWith(menu.route);
 
@@ -69,18 +72,21 @@ const Sidebar = () => {
             <Link
               href={menu.route}
               key={menu.route}
-              className={`px-4 py-2 rounded-md flex items-center gap-2 ${
+              className={`px-3 py-2.5 rounded-xl flex items-center gap-3 text-sm font-medium transition ${
                 isActive
-                  ? "bg-primary text-white"
-                  : "bg-primary/5 text-gray-700 dark:text-white dark:bg-gray-700"
+                  ? "bg-primary text-white shadow-sm shadow-primary/20"
+                  : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
               }`}
             >
+              <span className={isActive ? "text-white" : "text-slate-400"}>
+                {menu.icon}
+              </span>
               {menu.label}
             </Link>
           );
         })}
       </div>
-    </div>
+    </aside>
   );
 };
 

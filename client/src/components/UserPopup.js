@@ -3,38 +3,48 @@ import Link from "next/link";
 
 const UserPopup = ({ setShowPopup, user, logout }) => {
   return (
-    <div className="absolute top-17 right-40">
+    <>
       <div
-        className="fixed top-0 left-0 h-full w-full bg-black/40 z-10"
+        className="fixed inset-0 z-40"
         onClick={() => setShowPopup(false)}
       ></div>
-      <div className="bg-white rounded-lg shadow-md px-4 py-2 min-w-50 flex flex-col items-start space-y-2 relative z-50">
-        <h3 className="font-medium text-sm">{user.username}</h3>
-        <p className="text-sm">{user.email}</p>
-        <div className="w-full h-1 border-b border-gray-300"></div>
-
-        <Link
-          href={DASHBOARD_ROUTES}
-          className="px-4 py-1 rounded-md bg-gray-100 w-full text-left hover:bg-primary hover:text-white"
-        >
-          dashboard
-        </Link>
-        <Link
-          href={PROFILE_ROUTES}
-          className="px-4 py-1 rounded-md bg-gray-100 w-full text-left hover:bg-primary hover:text-white"
-        >
-          profile
-        </Link>
-        <div className="w-full h-1 border-b border-gray-300"></div>
-
-        <button
-          className="px-2 py-1 w-full rounded-lg border border-gray-400 cursor-pointer hover:bg-secondary hover:text-white"
-          onClick={logout}
-        >
-          logout
-        </button>
+      <div className="absolute top-14 right-4 sm:right-8 z-50 animate-fade-in">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 p-2 min-w-[220px]">
+          <div className="px-3 py-3 border-b border-slate-100 dark:border-slate-700">
+            <h3 className="font-semibold text-sm text-slate-900 dark:text-white truncate">
+              {user.username}
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+              {user.email}
+            </p>
+          </div>
+          <div className="py-1.5">
+            <Link
+              href={DASHBOARD_ROUTES}
+              onClick={() => setShowPopup(false)}
+              className="block px-3 py-2 rounded-lg text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+            >
+              Dashboard
+            </Link>
+            <Link
+              href={PROFILE_ROUTES}
+              onClick={() => setShowPopup(false)}
+              className="block px-3 py-2 rounded-lg text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+            >
+              Profile
+            </Link>
+          </div>
+          <div className="border-t border-slate-100 dark:border-slate-700 pt-1.5">
+            <button
+              className="block w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-secondary hover:bg-secondary/10 cursor-pointer transition"
+              onClick={logout}
+            >
+              Logout
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

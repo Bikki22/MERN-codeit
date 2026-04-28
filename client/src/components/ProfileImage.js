@@ -31,24 +31,29 @@ const ProfileImage = ({ user }) => {
   }
 
   return (
-    <div className="flex items-center gap-5">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 pb-5 border-b border-slate-200 dark:border-slate-700">
       {user?.profileImageUrl ? (
         <Image
           src={user.profileImageUrl}
           alt="profile"
-          height={64}
-          width={64}
-          className="h-16 w-16 rounded-full object-cover"
+          height={80}
+          width={80}
+          className="h-20 w-20 rounded-2xl object-cover ring-2 ring-slate-200 dark:ring-slate-700"
         />
       ) : (
-        <FaUser className="h-16 w-16  rounded-full p-3 bg-gray-200 text-gray-700" />
+        <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-primary to-primary-dark text-white flex items-center justify-center ring-2 ring-slate-200 dark:ring-slate-700">
+          <FaUser className="text-2xl" />
+        </div>
       )}
 
-      <form className="flex flex-col items-start gap-3" onSubmit={updateImage}>
+      <form
+        className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-1"
+        onSubmit={updateImage}
+      >
         <input
           type="file"
           accept="image/png,image/jpeg,image/jpg"
-          className="border border-gray-400 rounded-md px-3 py-1"
+          className="block text-sm text-slate-700 dark:text-slate-200 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
           required
           onChange={(e) => {
             const file = e.target.files[0];
@@ -59,9 +64,9 @@ const ProfileImage = ({ user }) => {
         <button
           type="submit"
           disabled={loading}
-          className="border border-gray-40 px-5 py-1 rounded-md bg-gray-200 cursor-pointer"
+          className="bg-primary text-white text-sm font-medium px-5 py-2 rounded-xl hover:bg-primary-dark hover:shadow-md hover:shadow-primary/20 cursor-pointer transition disabled:opacity-60"
         >
-          {loading ? "uplodaing..." : "Upload Image"}
+          {loading ? "Uploading..." : "Upload"}
         </button>
       </form>
     </div>

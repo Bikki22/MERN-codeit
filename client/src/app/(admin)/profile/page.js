@@ -59,11 +59,14 @@ const ProfilePage = () => {
 
   return (
     <section>
-      <div className="container mx-auto px-4 max-w-5xl">
-        <h1 className="text-3xl font-semibold mb-5 dark:text-white text-gray-800">
-          Your Profile
+      <div className="container mx-auto max-w-5xl">
+        <p className="text-xs font-semibold tracking-widest uppercase text-primary mb-2">
+          Settings
+        </p>
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 text-slate-900 dark:text-white">
+          Your profile
         </h1>
-        <div className="p-6 space-y-4 md:space-y-6 sm:p-8 dark:bg-slate-700 bg-white rounded-2xl w-full border border-gray-200 dark:border-gray-600 shadow-lg">
+        <div className="p-6 sm:p-8 space-y-6 dark:bg-slate-900 bg-white rounded-3xl w-full border border-slate-200 dark:border-slate-800 shadow-sm">
           <ProfileImage user={user} />
           <form
             onSubmit={handleSubmit(submitForm)}
@@ -72,14 +75,14 @@ const ProfilePage = () => {
             <div>
               <label
                 htmlFor="name"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
               >
                 Your name
               </label>
               <input
                 type="text"
                 id="name"
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
                 placeholder="John doe"
                 {...register("name", {
                   required: "Name is required.",
@@ -90,14 +93,14 @@ const ProfilePage = () => {
             <div>
               <label
                 htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
               >
                 Your email
               </label>
               <input
                 type="email"
                 id="email"
-                className="disabled:bg-gray-100 disabled:text-gray-600 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="disabled:bg-slate-100 disabled:text-slate-500 dark:disabled:bg-slate-800 dark:disabled:text-slate-400 w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
                 placeholder="name@company.com"
                 disabled
                 {...register("email")}
@@ -109,14 +112,14 @@ const ProfilePage = () => {
             <div>
               <label
                 htmlFor="phone"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
               >
                 Phone number
               </label>
               <input
                 type="tel"
                 id="phone"
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
                 placeholder="9876543210"
                 {...register("phone", {
                   required: "Phone number is required.",
@@ -131,14 +134,14 @@ const ProfilePage = () => {
             <div>
               <label
                 htmlFor="city"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
               >
                 Address City
               </label>
               <input
                 type="text"
                 id="city"
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
                 placeholder="Itahari"
                 {...register("city", {
                   required: "Address city is required.",
@@ -150,13 +153,13 @@ const ProfilePage = () => {
             <div>
               <label
                 htmlFor="province"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
               >
                 Province
               </label>
               <select
                 id="province"
-                className="border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
                 {...register("province", {
                   required: "Province is required.",
                 })}

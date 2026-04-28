@@ -34,17 +34,17 @@ const DeleteAction = ({ order }) => {
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="bg-red-500 rounded-md shadow text-white px-4 py-2 hover:bg-red-600 cursor-pointer"
+        className="inline-flex items-center bg-white border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 dark:bg-slate-800 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20 rounded-xl text-sm font-medium px-4 py-2 cursor-pointer transition"
       >
-        delete
+        Delete
       </button>
       <Modal
         showModal={showModal}
         setShowModal={setShowModal}
-        label={`Are you sure you want to delete ${order._id} order?`}
+        label={`Are you sure you want to delete this order?`}
         confirmAction={
           <button
-            className="py-2.5 px-5 ms-3 text-sm font-medium bg-red-500 rounded-lg hover:bg-red-600 text-white dark:bg-gray-800"
+            className="py-2.5 px-5 text-sm font-medium bg-red-600 rounded-xl hover:bg-red-700 hover:shadow-md hover:shadow-red-500/20 text-white cursor-pointer transition"
             onClick={removeOrder}
           >
             Yes, I&apos;m sure

@@ -7,52 +7,60 @@ import AddToCart from "./AddToCart";
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="w-full h-full dark:shadow px-3 py-3 shadow-xl rounded-md grid grid-rows-[auto_1fr_auto] border-2 border-gray-300">
-      <Link href={`/products/${product._id}`}>
-        <div className="w-full flex justify-center overflow-hidden border-1 border-gray-500 rounded-md">
+    <div className="group flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 hover:border-primary/30 transition-all duration-300">
+      <Link href={`/products/${product._id}`} className="block">
+        <div className="relative bg-slate-50 dark:bg-slate-800 aspect-square overflow-hidden">
           <Image
             src={product.imageUrls[0] ?? noImage}
             width={500}
             height={500}
             alt={product.name}
-            className="w-full max-h-40 py-3 object-contain hover:scale-125 transition-all duration-100 "
+            className="w-full h-full object-contain p-6 group-hover:scale-110 transition-transform duration-500"
             priority
           />
         </div>
       </Link>
-      <div className="px-5">
-        <Link
-          href={`?brand=${product.brand}`}
-          className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-blue-900 dark:text-blue-300"
-        >
-          {product.brand}
-        </Link>
-        <Link
-          href={`?category=${product.category}`}
-          className="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-gray-300"
-        >
-          {product.category}
-        </Link>
+      <div className="flex-1 flex flex-col px-5 py-4 gap-2">
+        <div className="flex flex-wrap gap-1.5">
+          <Link
+            href={`?brand=${product.brand}`}
+            className="bg-primary/10 text-primary text-[11px] font-semibold px-2 py-0.5 rounded-full hover:bg-primary/20 transition"
+          >
+            {product.brand}
+          </Link>
+          <Link
+            href={`?category=${product.category}`}
+            className="bg-slate-100 text-slate-700 text-[11px] font-semibold px-2 py-0.5 rounded-full dark:bg-slate-800 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+          >
+            {product.category}
+          </Link>
+        </div>
         <Link href={`/products/${product._id}`}>
-          <h1 className="text-xl font-bold px-2 py-1 ">{product.name}</h1>
+          <h3 className="text-base font-semibold text-slate-900 dark:text-white truncate group-hover:text-primary transition">
+            {product.name}
+          </h3>
         </Link>
-        <div>
-          <span className="text-primary font-bold mr-1 text-lg">
+        <div className="flex items-baseline gap-2">
+          <span className="text-lg font-bold text-slate-900 dark:text-white">
             Rs.{product.price}
           </span>
-          <span className="line-through font-bold mr-1 text-lg px-2">
-            Rs.{product.price * 1.2}
+          <span className="line-through text-sm text-slate-400">
+            Rs.{Math.round(product.price * 1.2)}
+          </span>
+          <span className="ml-auto text-[11px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full ring-1 ring-inset ring-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-300 dark:ring-emerald-800">
+            -20%
           </span>
         </div>
-        <div className="text-yellow-500 text-md py-2 flex items-center  gap-0.5">
+        <div className="text-amber-400 text-xs flex items-center gap-0.5">
           <FaRegStar />
           <FaRegStar />
           <FaRegStar />
           <FaRegStar />
           <FaRegStar />
+          <span className="text-slate-400 ml-1.5">(0)</span>
         </div>
       </div>
-      <div>
+      <div className="px-5 pb-5">
         <AddToCart product={product} />
       </div>
     </div>

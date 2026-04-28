@@ -79,7 +79,7 @@ const AddProductForm = ({ product, isEditing = false }) => {
         <div className="sm:col-span-2">
           <label
             htmlFor="name"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
           >
             Product Name
           </label>
@@ -87,7 +87,7 @@ const AddProductForm = ({ product, isEditing = false }) => {
             type="text"
             name="name"
             id="name"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
             placeholder="Type product name"
             {...register("name", { required: "Product name is required" })}
           />
@@ -96,7 +96,7 @@ const AddProductForm = ({ product, isEditing = false }) => {
         <div className="w-full">
           <label
             htmlFor="brand"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
           >
             Brand
           </label>
@@ -104,7 +104,7 @@ const AddProductForm = ({ product, isEditing = false }) => {
             type="text"
             name="brand"
             id="brand"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
             placeholder="Product brand"
             {...register("brand", { required: "Brand is required" })}
           />
@@ -113,7 +113,7 @@ const AddProductForm = ({ product, isEditing = false }) => {
         <div className="w-full">
           <label
             htmlFor="price"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
           >
             Price
           </label>
@@ -121,7 +121,7 @@ const AddProductForm = ({ product, isEditing = false }) => {
             type="number"
             name="price"
             id="price"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
             placeholder="Rs. 2999"
             {...register("price", {
               required: "Product price is required",
@@ -132,7 +132,7 @@ const AddProductForm = ({ product, isEditing = false }) => {
         <div>
           <label
             htmlFor="category"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
           >
             Category
           </label>
@@ -140,7 +140,7 @@ const AddProductForm = ({ product, isEditing = false }) => {
             type="text"
             name="category"
             id="category"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
             placeholder="category"
             {...register("category", {
               required: "Product category is required",
@@ -151,7 +151,7 @@ const AddProductForm = ({ product, isEditing = false }) => {
         <div>
           <label
             htmlFor="stock"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
           >
             Stock
           </label>
@@ -159,7 +159,7 @@ const AddProductForm = ({ product, isEditing = false }) => {
             type="number"
             name="stock"
             id="stock"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm placeholder:text-slate-400 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
             placeholder={12}
             {...register("stock", {
               required: "product stock is required",
@@ -171,14 +171,14 @@ const AddProductForm = ({ product, isEditing = false }) => {
         <div className="sm:col-span-2">
           <label
             htmlFor="description"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
           >
             Description
           </label>
           <textarea
             id="description"
             rows={8}
-            className="block p-2.5 w-full h-40 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="block w-full h-40 p-3 text-sm text-slate-900 bg-white dark:bg-slate-800 dark:text-white rounded-xl border border-slate-200 dark:border-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
             placeholder="Your description here"
             defaultValue={""}
           />
@@ -187,7 +187,7 @@ const AddProductForm = ({ product, isEditing = false }) => {
         <div className="flex items-center justify-center w-full sm:col-span-2">
           <label
             htmlFor="images"
-            className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500"
+            className="flex flex-col items-center justify-center w-full h-44 border-2 border-slate-200 dark:border-slate-700 border-dashed rounded-2xl cursor-pointer bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-primary/40 transition"
           >
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <svg
@@ -254,10 +254,11 @@ const AddProductForm = ({ product, isEditing = false }) => {
 
       <button
         type="submit"
-        className="inline-flex items-center px-6 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center bg-primary text-white hover:bg-primary/90 rounded-lg focus:ring-4 hover:bg-primary-800 cursor-pointer"
-        onClick={() => setLoading(true)}
+        className="inline-flex items-center gap-2 px-6 py-2.5 mt-6 text-sm font-semibold bg-primary text-white hover:bg-primary-dark hover:shadow-md hover:shadow-primary/20 rounded-xl cursor-pointer transition disabled:opacity-60"
+        disabled={loading}
       >
-        {loading ? <Spinner /> : isEditing ? "Edit Product" : "Add Product"}
+        {loading && <Spinner className="w-4 h-4 text-white/30 fill-white" />}
+        {isEditing ? "Save changes" : "Add product"}
       </button>
     </form>
   );

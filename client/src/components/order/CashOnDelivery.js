@@ -23,7 +23,7 @@ const CashOnDelivery = ({ order }) => {
 
   return (
     <button
-      className="bg-green-700 hover:bg-green-800 px-4 py-2 text-sm rounded-md text-white flex items-center gap-2 cursor-pointer"
+      className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 hover:shadow-md hover:shadow-emerald-500/20 px-4 py-2 text-sm font-medium rounded-xl text-white cursor-pointer transition"
       onClick={confirmOrder}
     >
       <LiaMoneyBillWaveSolid />

@@ -15,7 +15,7 @@ const AddToCart = ({ product }) => {
 
   return (
     <button
-      className="w-full flex justify-center border-1 py-1 my-2 rounded-sm text-lg bg-gray-800 text-white hover:bg-gray-700 cursor-pointer"
+      className="w-full inline-flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold bg-slate-900 text-white hover:bg-primary hover:shadow-md hover:shadow-primary/20 cursor-pointer transition-all"
       onClick={addProductToCart}
     >
       Add to cart

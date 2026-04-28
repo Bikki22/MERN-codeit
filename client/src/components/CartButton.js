@@ -13,12 +13,15 @@ const CartButton = () => {
   return (
     <button
       onClick={() => router.push("/products/cart")}
-      className="cursor-pointer relative px-1"
+      className="cursor-pointer relative inline-flex h-9 w-9 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white transition"
+      aria-label="Cart"
     >
-      <div className="absolute -top-2 -right-2 text-white bg-red-500 text-[0.75rem] rounded-full h-4 w-4 flex justify-center items-center ">
-        <span>{products.length}</span>
-      </div>
-      <MdOutlineAddShoppingCart />
+      {products.length > 0 && (
+        <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-secondary rounded-full flex justify-center items-center ring-2 ring-white dark:ring-[#0b1020]">
+          {products.length}
+        </span>
+      )}
+      <MdOutlineAddShoppingCart className="w-5 h-5" />
     </button>
   );
 };

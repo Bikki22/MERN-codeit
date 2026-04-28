@@ -5,18 +5,16 @@ const Button = ({
   label,
   loading = false,
   type = "submit",
-  className = "w-full bg-primary hover:bg-primary/90 dark:bg-primary dark:hover:bg-primary/90",
+  className = "w-full bg-primary hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/20 transition-all",
 }) => {
   return (
     <button
       type={type}
       disabled={loading}
-      className={`relative text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center ${className}`}
+      className={`relative text-white font-semibold rounded-xl text-sm px-5 py-2.5 text-center inline-flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer ${className}`}
     >
+      {loading && <Spinner className="w-4 h-4 text-white/30 fill-white" />}
       {label}
-      {loading && (
-        <Spinner className="w-5 h-5 fill-primary/80 absolute right-3 top-2.5" />
-      )}
     </button>
   );
 };

@@ -57,26 +57,42 @@ const FilterDrawer = ({ showFilter, setShowFilter, brands, categories }) => {
     setCategoriesFilter(DEFAULT_CATEGORY_FILTER);
   }
 
+  const selectClass =
+    "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm rounded-xl focus:ring-2 focus:ring-primary/40 focus:border-primary block w-full p-2.5 transition outline-none";
+  const inputClass = selectClass;
+  const sectionLabel =
+    "block mb-2 text-[11px] font-semibold tracking-widest text-slate-500 uppercase dark:text-slate-400";
+
   return (
-    <div className={showFilter ? "block absolute" : "hidden"}>
+    <div className={showFilter ? "block" : "hidden"}>
       <div
-        className="fixed top-0 left-0 h-screen w-full bg-black dark:bg-slate-900 opacity-20 z-10"
+        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 animate-fade-in"
         onClick={() => setShowFilter(false)}
       ></div>
-      <div className="overflow-y-auto fixed top-14 left-0 z-20 h-screen bg-white dark:bg-slate-900 px-4 pt-8 pb-14 min-w-72 shadow">
-        <h4 className="text-2xl font-medium mb-2 dark:text-white">
-          Filter products
-        </h4>
-        <div className="py-3">
-          <label
-            htmlFor="limit"
-            className="block mb-2 text-sm font-semibold text-gray-500 uppercase dark:text-gray-300"
+      <div className="overflow-y-auto fixed top-0 left-0 bottom-0 z-50 h-full bg-white dark:bg-slate-900 px-6 pt-6 pb-14 w-80 shadow-2xl border-r border-slate-200 dark:border-slate-800 animate-fade-in">
+        <div className="flex items-center justify-between mb-1">
+          <h4 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+            Filters
+          </h4>
+          <button
+            onClick={() => setShowFilter(false)}
+            className="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1 rounded-lg cursor-pointer"
+            aria-label="Close"
           >
+            ✕
+          </button>
+        </div>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
+          Refine your results
+        </p>
+
+        <div className="py-3">
+          <label htmlFor="limit" className={sectionLabel}>
             Limit
           </label>
           <select
             id="limit"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className={selectClass}
             onChange={(e) => setLimit(e.target.value)}
           >
             <option value="10">10</option>
@@ -87,15 +103,12 @@ const FilterDrawer = ({ showFilter, setShowFilter, brands, categories }) => {
         </div>
 
         <div className="py-3">
-          <label
-            htmlFor="orderBy"
-            className="block mb-2 text-sm font-semibold text-gray-500 uppercase dark:text-gray-300"
-          >
+          <label htmlFor="orderBy" className={sectionLabel}>
             Order By
           </label>
           <select
             id="orderBy"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className={selectClass}
             onChange={(e) => setSort(e.target.value)}
           >
             <option value={JSON.stringify({ createdAt: -1 })}>Latest</option>
@@ -112,51 +125,36 @@ const FilterDrawer = ({ showFilter, setShowFilter, brands, categories }) => {
         </div>
 
         <div className="py-3">
-          <label className="block mb-2 text-sm font-semibold text-gray-500 uppercase dark:text-gray-300">
-            Price Range
-          </label>
-          <label
-            htmlFor="min"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Minimum price:
-          </label>
-          <input
-            type="number"
-            id="min"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="10"
-            onChange={(e) => setMinPrice(e.target.value)}
-            min={0}
-          />
-          <label
-            htmlFor="max"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-2"
-          >
-            Maximum price:
-          </label>
-          <input
-            type="number"
-            id="max"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="100000"
-            onChange={(e) => setMaxPrice(e.target.value)}
-          />
+          <label className={sectionLabel}>Price Range</label>
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              type="number"
+              id="min"
+              className={inputClass}
+              placeholder="Min"
+              onChange={(e) => setMinPrice(e.target.value)}
+              min={0}
+            />
+            <input
+              type="number"
+              id="max"
+              className={inputClass}
+              placeholder="Max"
+              onChange={(e) => setMaxPrice(e.target.value)}
+            />
+          </div>
         </div>
 
         <div className="py-3">
-          <label
-            htmlFor="category"
-            className="block mb-2 text-sm font-semibold text-gray-500 uppercase dark:text-gray-300"
-          >
-            Category Filter
+          <label htmlFor="category" className={sectionLabel}>
+            Category
           </label>
           <select
             id="category"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className={selectClass}
             onChange={(e) => setCategoriesFilter(e.target.value)}
           >
-            <option value="">Select Category</option>
+            <option value="">All categories</option>
             {categories.map((category, index) => (
               <option key={index} value={category}>
                 {category}
@@ -166,44 +164,44 @@ const FilterDrawer = ({ showFilter, setShowFilter, brands, categories }) => {
         </div>
 
         <div className="py-3">
-          <label
-            htmlFor="brands"
-            className="block mb-2 text-sm font-semibold text-gray-500 uppercase dark:text-gray-300"
-          >
-            Brands Filter
+          <label htmlFor="brands" className={sectionLabel}>
+            Brands
           </label>
-          {brands.map((brand, index) => (
-            <div key={index} className="flex items-center gap-2 mb-1 ml-1">
-              <input
-                id={brand}
-                type="checkbox"
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm dark:bg-gray-600 dark:border-gray-500"
-                onChange={() => handleBrandsFilterChange(brand)}
-              />
+          <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
+            {brands.map((brand, index) => (
               <label
+                key={index}
                 htmlFor={brand}
-                className="w-full text-sm font-medium text-gray-900 dark:text-gray-300"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition"
               >
-                {brand}
+                <input
+                  id={brand}
+                  type="checkbox"
+                  className="w-4 h-4 accent-primary cursor-pointer"
+                  onChange={() => handleBrandsFilterChange(brand)}
+                />
+                <span className="text-sm text-slate-700 dark:text-slate-200">
+                  {brand}
+                </span>
               </label>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        <div className="py-4">
+        <div className="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2">
           <button
             type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            className="w-full text-white bg-primary hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/20 font-semibold rounded-xl text-sm px-5 py-2.5 cursor-pointer transition"
             onClick={() => setFilter()}
           >
             Apply filters
           </button>
           <button
             type="button"
-            className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800"
+            className="w-full text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 font-medium rounded-xl text-sm px-5 py-2.5 cursor-pointer transition"
             onClick={resetFilter}
           >
-            Reset filters
+            Reset
           </button>
         </div>
       </div>

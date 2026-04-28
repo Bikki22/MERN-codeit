@@ -6,7 +6,7 @@ export const metadata = {
 };
 
 const ProductLayout = ({ children }) => {
-  return <div className="py-5 bg-slate-100">{children}</div>;
+  return <div className="bg-background min-h-screen">{children}</div>;
 };
 
 export default ProductLayout;

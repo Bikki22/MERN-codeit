@@ -65,18 +65,17 @@ const OrdersTable = () => {
   console.log(orders);
   return (
     <div>
-      <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased">
-        <div className="mx-auto max-w-screen-2xl px-4 lg:px-12">
-          <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-              <div className="flex-1 flex items-center space-x-2">
-                <h5>
-                  <span className="text-gray-500">All Products: </span>
-                  <span className="dark:text-white">123456</span>
-                </h5>
-                <h5 className="text-gray-500 dark:text-gray-400 ml-1">
-                  1-100 (436)
-                </h5>
+      <section className="antialiased">
+        <div className="mx-auto max-w-screen-2xl">
+          <div className="bg-white dark:bg-slate-900 relative shadow-sm border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 p-5">
+              <div className="flex-1 flex items-center gap-3 text-sm">
+                <span className="text-slate-500 dark:text-slate-400">
+                  All orders
+                </span>
+                <span className="font-semibold text-slate-900 dark:text-white">
+                  {orders.length}
+                </span>
                 <button
                   type="button"
                   className="group"
@@ -106,17 +105,17 @@ const OrdersTable = () => {
                   <div className="tooltip-arrow" data-popper-arrow />
                 </div>
               </div>
-              <div className="flex-shrink-0 flex flex-col items-start md:flex-row md:items-center lg:justify-end space-y-3 md:space-y-0 md:space-x-3">
+              <div className="flex-shrink-0 flex items-center gap-2">
                 <button
                   type="button"
-                  className="flex-shrink-0 inline-flex items-center justify-center py-2 px-3 text-xs font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10  dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 gap-3"
+                  className="inline-flex items-center gap-2 py-2 px-3 text-xs font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition"
                 >
-                  <FaCog className="mr-2 w-6 h-4 text-lg" />
+                  <FaCog className="w-3.5 h-3.5" />
                   Table settings
                 </button>
               </div>
             </div>
-            <div className="flex flex-col md:flex-row items-stretch md:items-center md:space-x-3 space-y-3 md:space-y-0 justify-between mx-4 py-4 border-t dark:border-gray-700">
+            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 justify-between px-5 py-4 border-t border-slate-100 dark:border-slate-800">
               <div className="w-full md:w-1/2">
                 <form className="flex items-center">
                   <label htmlFor="simple-search" className="sr-only">
@@ -141,31 +140,18 @@ const OrdersTable = () => {
                     <input
                       type="text"
                       id="simple-search"
-                      placeholder="Search for orders"
-                      required
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      placeholder="Search orders..."
+                      className="block w-full pl-10 pr-4 py-2.5 text-sm text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
                     />
                   </div>
                 </form>
               </div>
               <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                <Link
-                  href={`${PRODUCT_MANAGEMENT_ROUTE}/${ADD_PRODUCT}`}
-                  type="button"
-                  id="createProductButton"
-                  data-modal-toggle="createProductModal"
-                  className="flex items-center justify-center bg-primary-700 hover:bg-primary-800  border-1 border-gray-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-gray-700 dark:text-white hover:bg-gray-100"
-                >
-                  <FaPlus className="h-3.5 w-3.5 mr-1.5 -ml-1 font-semibold" />
-                  Add Orders
-                </Link>
                 <button
-                  id="filterDropdownButton"
-                  data-dropdown-toggle="filterDropdown"
-                  className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 gap-2"
+                  className="inline-flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer transition"
                   type="button"
                 >
-                  <FaEdit />
+                  <FaEdit className="w-3.5 h-3.5" />
                   Filter options
                   <svg
                     className="-mr-1 ml-1.5 w-5 h-5"
@@ -184,8 +170,8 @@ const OrdersTable = () => {
               </div>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 cursor-pointer">
+              <table className="w-full text-sm text-left text-slate-700 dark:text-slate-300">
+                <thead className="text-[11px] text-slate-500 dark:text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800/50 cursor-pointer">
                   <tr>
                     {columns.map((column, index) => (
                       <th
@@ -213,7 +199,7 @@ const OrdersTable = () => {
                   {orders.map((order, index) => (
                     <tr
                       key={index}
-                      className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition"
                     >
                       <td className="p-4 w-4">
                         <p>{index + 1}</p>
@@ -235,17 +221,17 @@ const OrdersTable = () => {
                         </div>
                       </th>
                       <td className="px-4 py-3 text-center">
-                        <span className="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                        <span className="bg-primary/10 text-primary text-xs font-semibold px-2 py-1 rounded-full">
                           {order.brand}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                        <span className="bg-primary/10 text-primary text-xs font-semibold px-2 py-1 rounded-full">
                           {order.category}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                        <span className="bg-primary/10 text-primary text-xs font-semibold px-2 py-1 rounded-full">
                           Rs. {order.price}
                         </span>
                       </td>
@@ -256,7 +242,7 @@ const OrdersTable = () => {
                         </div>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                        <span className="bg-primary/10 text-primary text-xs font-semibold px-2 py-1 rounded-full">
                           {format(order.createdAt, "dd MMM, yyyy")}
                         </span>
                       </td>

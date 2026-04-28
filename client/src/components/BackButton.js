@@ -13,10 +13,11 @@ const BackButton = () => {
 
   return (
     <button
-      className="flex items-center gap-2 mb-4 cursor-pointer text-gray-700 dark:text-gray-300"
+      className="inline-flex items-center gap-2 mb-6 cursor-pointer text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
       onClick={back}
     >
-      <IoMdArrowRoundBack className="w-32 text-2xl" />
+      <IoMdArrowRoundBack className="text-lg" />
+      Back
     </button>
   );
 };

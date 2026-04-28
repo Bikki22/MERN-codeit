@@ -4,15 +4,20 @@ import React from "react";
 
 const AddProductPage = () => {
   return (
-    <section className="bg-white dark:bg-gray-900">
-      <div className="max-w-screen-xl mx-auto px-10">
+    <section>
+      <div className="mx-auto max-w-3xl">
         <BackButton />
-      </div>
-      <div className="px-4 mx-auto max-w-2xl">
-        <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-          Add a new product
-        </h2>
-        <AddProductForm />
+        <div className="mb-6">
+          <p className="text-xs font-semibold tracking-widest uppercase text-primary mb-2">
+            Catalog
+          </p>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+            Add a new product
+          </h2>
+        </div>
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 sm:p-8">
+          <AddProductForm />
+        </div>
       </div>
     </section>
   );

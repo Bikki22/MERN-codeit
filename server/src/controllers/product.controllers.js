@@ -11,8 +11,7 @@ export const getAllProduct = asyncHandler(async (req, res) => {
   const { brands, category, min, max, limit, name, offset, createdBy } =
     req.query;
 
-  const sort = JSON.parse(req.query.sort || "{}");
-
+  const sort = req.query.sort || {};
   const filters = {};
 
   if (brands) filters.brand = { $in: brands.split(",") };

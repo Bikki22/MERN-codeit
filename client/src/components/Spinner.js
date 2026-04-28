@@ -3,7 +3,7 @@ import React from "react";
 const Spinner = ({ className = "w-6 h-6" }) => {
   return (
     <svg
-      className={`text-gray-200 animate-spin dark:text-gray-600 fill-blue-6001 ${className}`}
+      className={`text-slate-200 animate-spin dark:text-slate-700 fill-primary ${className}`}
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

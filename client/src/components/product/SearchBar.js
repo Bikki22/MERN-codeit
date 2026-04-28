@@ -19,45 +19,39 @@ const SearchBar = () => {
   }
 
   return (
-    <div className="flex items-center justify-center">
-      <form className="max-w-2xl mx-auto">
-        <label
-          htmlFor="default-search"
-          className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-        >
-          Search
-        </label>
-        <div className="relative">
-          <div className="absolute inset-y-0 start-0 flex items-center px-3 pointer-events-none">
-            <FaMagnifyingGlass className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-          </div>
-          <input
-            type="search"
-            id="default-search"
-            className="block w-lg p-4 pl-8 text-sm text-gray-900 border outline-gray-500 border-gray-200 rounded-lg bg-gray-50  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white "
-            placeholder="Search Mockups, Logos..."
-            onChange={(e) => setProductName(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                // Handle search submission
-                searchProduct();
-              }
-            }}
-          />
-          <button
-            type="submit"
-            className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800  font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700  cursor-pointer"
-            onClick={(e) => {
+    <form className="w-full sm:w-auto">
+      <label htmlFor="default-search" className="sr-only">
+        Search
+      </label>
+      <div className="relative w-full sm:w-80 md:w-96">
+        <div className="absolute inset-y-0 start-0 flex items-center pl-3.5 pointer-events-none">
+          <FaMagnifyingGlass className="w-4 h-4 text-slate-400" />
+        </div>
+        <input
+          type="search"
+          id="default-search"
+          className="block w-full pl-10 pr-24 py-2.5 text-sm text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition"
+          placeholder="Search products..."
+          onChange={(e) => setProductName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
               e.preventDefault();
               searchProduct();
-            }}
-          >
-            Search
-          </button>
-        </div>
-      </form>
-    </div>
+            }
+          }}
+        />
+        <button
+          type="submit"
+          className="text-white absolute end-1.5 top-1/2 -translate-y-1/2 bg-primary hover:bg-primary-dark font-semibold rounded-lg text-xs px-3.5 py-1.5 cursor-pointer transition"
+          onClick={(e) => {
+            e.preventDefault();
+            searchProduct();
+          }}
+        >
+          Search
+        </button>
+      </div>
+    </form>
   );
 };
 
